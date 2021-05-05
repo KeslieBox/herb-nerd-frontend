@@ -19,11 +19,12 @@ class Property{
             })
     }
     // this returns the properties for the herb profile
-    appendProperty(){
-        if (this.propertyIds.includes(property.id)){
-            const p = document.createElement('p')
-            p.innerHTML += `${property.name}, `
-            return propDiv.append(p) 
-        }
+    appendProperty(par){
+        // if (this.propertyIds.includes(property.id)){
+            // const par = document.createElement('p')
+            par.innerHTML += `${this.name}, `
+            // propDiv.append(par) 
+        // }
     }
+    
 }

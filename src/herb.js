@@ -22,18 +22,16 @@ class Herb {
 
     get properties(){
         // how to link up herb w/ property?
-        return Property.allProperties.filter(property => {
-            // this.propertyIds.includes(property.id)
-            // instance method in property class that handles creating/ appending to dom
-            if (this.propertyIds.includes(property.id)){
-                const p = document.createElement('p')
-                p.innerHTML += `${property.name}, `
-                return propDiv.append(p) 
-            }
-        })
-    }
-
-    
+        // return Property.allProperties.filter(property => {
+            // pull this out into instance method in property class that handles creating/ appending to dom
+            // if (this.propertyIds.includes(property.id)){
+            //     const p = document.createElement('p')
+            //     p.innerHTML += `${property.name}, `
+            //     return propDiv.append(p) 
+            // }
+        // })
+        return Property.allProperties.filter(property =>this.propertyIds.includes(property.id))
+    }  
     
     static fetchHerbs() {
         // fetch herbs
@@ -63,29 +61,6 @@ class Herb {
         ul.append(li)    
     }
 
-    // without handling for null properties
-    // herbProfile(e){
-    //     e.preventDefault()
-    //     const container = document.getElementById("herbsContainer")
-    //     const showHerb = document.createElement('div')
-    //     // need to create error handling when a property is null
-    //     // need to add properties
-    //     showHerb.innerHTML = `
-    //         <h1>${this.commonName}</h1>
-//                 <h3>Latin Name:</h3>
-//                 ${this.latinName}<br><br>
-//                 <h3>History:</h3>
-//                 ${this.history}<br><br>
-//                 <h3>Medicinal Uses:</h3>
-//                 ${this.medicinalUses}<br><br>
-//                 <h3>Spiritual Uses:</h3>
-//                 ${this.spiritualUses}
-    //         `
-    //     showHerb.id = 'herbProfile'
-    //     container.innerText = ""
-    //     container.append(showHerb)
-    // }
-
     herbProfile(e){
         e.preventDefault()
         const container = document.getElementById("herbsContainer")
@@ -98,6 +73,8 @@ class Herb {
 
     profileContentCreator(container){
         // how to clean this up??
+
+        const par = document.createElement('p')
         // give divs ids?
         // let latinName = document.createElement('div')
         // let spiritualUses = document.createElement('div')
@@ -115,30 +92,16 @@ class Herb {
         // `
         // container.append(herbProfile)
 
-        latDiv.innerHTML = `
-        <h3>Latin Name:</h3>
-        ${this.latinName}<br><br>`
+        latDiv.innerHTML = `<h3>Latin Name:</h3> ${this.latinName}<br><br>`
 
-        if(!this.properties){
-            propDiv.innerHTML = `<h3>Properties:</h3><br>`
-        } else {
-            propDiv.innerHTML = `<h3>Properties:</h3>`
-            // iterate through properties & call appendProperty??
-            this.properties
-        }
+        propDiv.innerHTML = `<h3>Properties:</h3>`
+        this.properties.forEach(p => p.appendProperty(par))
 
-        medDiv.innerHTML = `
-        <h3>Medicinal Uses:</h3>
-        ${this.medicinalUses}<br><br>`
+        medDiv.innerHTML = `<h3>Medicinal Uses:</h3> ${this.medicinalUses}<br><br>`
+        historyDiv.innerHTML = `<h3>History:</h3> ${this.history}<br><br>`
+        spiritDiv.innerHTML = `<h3>Spiritual Uses:</h3> ${this.spiritualUses}<br><br>`
 
-        historyDiv.innerHTML = `
-        <h3>History:</h3>
-        ${this.history}<br><br>`
-
-        spiritDiv.innerHTML = `
-        <h3>Spiritual Uses:</h3>
-        ${this.spiritualUses}<br><br>`
-
+        propDiv.append(par) 
         container.append(latDiv)
         container.append(propDiv)
         container.append(medDiv)
