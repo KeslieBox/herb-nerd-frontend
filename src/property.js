@@ -18,13 +18,25 @@ class Property{
                 })
             })
     }
-    // this returns the properties for the herb profile
-    appendProperty(par){
-        // if (this.propertyIds.includes(property.id)){
-            // const par = document.createElement('p')
-            par.innerHTML += `${this.name}, `
-            // propDiv.append(par) 
-        // }
+
+    // don't think i need this anymore
+    // appendPropertyToProfile(par){
+    //     par.innerHTML += `${this.name}, `
+    // }
+
+    static createCheckboxes(prop){
+        this.allProperties.forEach(p => {
+            const cb = document.createElement('input')
+            const label = document.createElement('label')
+            label.innerText = p.name
+            cb.setAttribute('type', 'checkbox')
+            cb.value = p.name
+            cb.innerText = p.name
+            prop.appendChild(cb)
+            prop.appendChild(label)
+            // prop.innerText += p.name
+        })
+        
     }
-    
+
 }
