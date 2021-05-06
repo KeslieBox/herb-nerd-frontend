@@ -24,19 +24,33 @@ class Property{
     //     par.innerHTML += `${this.name}, `
     // }
 
-    static createCheckboxes(prop){
-        this.allProperties.forEach(p => {
-            const cb = document.createElement('input')
-            const label = document.createElement('label')
-            label.innerText = p.name
-            cb.setAttribute('type', 'checkbox')
-            cb.value = p.name
-            cb.innerText = p.name
-            prop.appendChild(cb)
-            prop.appendChild(label)
-            // prop.innerText += p.name
-        })
+
+    // moved to herb class
+    // static appendCheckboxes(prop){
+    //     // need to know what herb i'm editing, if that herb is associated, fill in check box
+    //     this.allProperties.forEach(p => {
+    //         const cb = document.createElement('input')
+    //         const label = document.createElement('label')
+    //         label.innerText = p.name
+    //         // want to add event listener to take us to property show page:
+    //         // label.addEventListener('click', e => this.fetchProperty(e))
+    //         cb.setAttribute('type', 'checkbox')
+    //         // ###need to get value of checked boxes, not value of every property
+    //         // cb.value = p.name
+    //         cb.innerText = p.name
+    //         prop.appendChild(cb)
+    //         prop.appendChild(label)
+    //         // if checked, get value and add to herb's properties...give checkboxes id value here
+    //         // prop.innerText += p.name
+    //     })
+
         
-    }
+
+        // want to add event listener to take us to property show page
+        // fetchProperty(e){
+        //     debugger
+        // }
+        
+    // }
 
 }
