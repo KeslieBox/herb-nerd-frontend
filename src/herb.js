@@ -110,7 +110,7 @@ class Herb {
                 <label id='prop'>Medicinal Properties:</label>
                 <span class='checkbox'></span><br><br>
                 <label>Medicinal Uses:</label><br>
-                <textarea rows = "5" cols = "60" id='medicinal' type="text_area" value="${this.medicinalUses}"></textarea><br>
+                <textarea rows = "5" cols = "60" id='medicinal' type="text_area" form='herbForm'>${this.medicinalUses}</textarea><br>
                 <label>Spiritual Uses:</label><br>
                 <textarea rows = "5" cols = "60" id='spiritual' type="text" value="${this.spiritualUses}"></textarea><br><br>
                 <label>History:</label><br>
@@ -122,7 +122,7 @@ class Herb {
         const formFound = document.getElementById('herbForm')
         const checkbox = document.getElementsByClassName('checkbox')[0]
         this.appendCheckboxes(checkbox)
-
+        
         formFound.addEventListener('submit', e => this.submitEdit(e))
     }
 
