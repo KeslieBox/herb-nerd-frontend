@@ -20,11 +20,6 @@ class Property{
             })
     }
 
-    // don't think i need this anymore
-    // appendPropertyToProfile(par){
-    //     par.innerHTML += `${this.name}, `
-    // }
-
 
     // how to use the method from the herb class instead of rewriting??
     static appendCheckboxes(){
@@ -46,15 +41,12 @@ class Property{
         })
     }
 
-    
-        
-
-        // want to add event listener to take us to property show page
-        // fetchProperty(e){
-        //     debugger
-        // }
-        
+    // want to add event listener to take us to property show page
+    // fetchProperty(e){
+    //     debugger
     // }
+        
+    
 
     // static newHerbForm(){
     //     const checkbox = document.getElementsByClassName('checkbox')[0]
@@ -63,5 +55,42 @@ class Property{
     //     this.appendCheckboxes(checkbox)
     //     // cb.forEach(cb => !checkboxProperties.includes(parseInt(cb.id)) ? checkboxProperties.push(parseInt(cb.id)) : cb)
     // }
+
+    static newPropertyCheck(properties){
+        
+        const propertiesInput = []
+        // const properties = document.getElementById('properties').value.toLowerCase().split(', ')
+        
+        properties.forEach(p => {
+            if (!propertiesInput.includes(p) && !Property.allProperties.includes(p)) {
+                propertiesInput.push(p)
+                this.postProperty(p)
+            }
+        })
+    }
+    
+    static postProperty(p){
+       
+        const options = {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                property: {
+                    name: p
+                }
+            })
+        }
+
+       event.target.reset()
+
+        fetch('http://localhost:3000/properties', options)
+            .then(resp => resp.json())
+            .then(propObj => {
+                new Property(propObj)
+            })
+    }
 
 }

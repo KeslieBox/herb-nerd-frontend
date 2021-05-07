@@ -240,13 +240,16 @@ class Herb {
         const checkbox = document.querySelectorAll('.cb')
         const common = document.getElementById('common').value
         const latin = document.getElementById('latin').value
-        const properties = document.getElementById('properties').value
+        const properties = document.getElementById('properties').value.toLowerCase().split(', ')
         const medicinal = document.getElementById('medicinal').value
         const history = document.getElementById('history').value
         const spiritual = document.getElementById('spiritual').value
-
         checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
+        // iterate through an array of properties created through text input and add to checkboxProperties array??
 
+        if(properties){
+            Property.newPropertyCheck(properties)
+        }
 
         const options = {
             method: 'POST',
@@ -273,7 +276,6 @@ class Herb {
         fetch(herbsURL, options)
         .then(resp => resp.json())
         .then(herbObj => {
-            debugger
             let herb = new Herb(herbObj)
             herb.appendHerb()
         })
