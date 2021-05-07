@@ -1,6 +1,8 @@
 Herb.fetchHerbs()
 Property.fetchProperties()
+// const herbForm = document.getElementById('herbForm')
+const encyclopedia = document.getElementById('encyclopedia')
 
-const herbForm = document.getElementById('herbForm')
-herbForm.addEventListener('submit', Herb.postHerb)
+// herbForm.addEventListener('submit', e => Herb.postHerb(e))
+encyclopedia.addEventListener('click', e => Herb.renderHerbs(Herb.allHerbs))
 

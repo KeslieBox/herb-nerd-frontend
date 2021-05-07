@@ -16,6 +16,7 @@ class Property{
                         new Property(p)
                     }
                 })
+                this.appendCheckboxes()
             })
     }
 
@@ -25,25 +26,27 @@ class Property{
     // }
 
 
-    // moved to herb class
-    // static appendCheckboxes(prop){
-    //     // need to know what herb i'm editing, if that herb is associated, fill in check box
-    //     this.allProperties.forEach(p => {
-    //         const cb = document.createElement('input')
-    //         const label = document.createElement('label')
-    //         label.innerText = p.name
-    //         // want to add event listener to take us to property show page:
-    //         // label.addEventListener('click', e => this.fetchProperty(e))
-    //         cb.setAttribute('type', 'checkbox')
-    //         // ###need to get value of checked boxes, not value of every property
-    //         // cb.value = p.name
-    //         cb.innerText = p.name
-    //         prop.appendChild(cb)
-    //         prop.appendChild(label)
-    //         // if checked, get value and add to herb's properties...give checkboxes id value here
-    //         // prop.innerText += p.name
-    //     })
+    // how to use the method from the herb class instead of rewriting??
+    static appendCheckboxes(){
+        const checkbox = document.getElementsByClassName('checkbox')[0]
+        const cb = document.querySelectorAll('.cb')
+        this.allProperties.forEach(p => {
+            const cb = document.createElement('input')
+            const label = document.createElement('label')
+            label.innerText = p.name
+            label.id = p.id
+            // want to add event listener to take us to property show page:
+            // label.addEventListener('click', e => this.fetchProperty(e))
+            cb.setAttribute('type', 'checkbox')
+            cb.id = p.id
+            cb.className = 'cb'
+            checkbox.appendChild(cb)
+            checkbox.appendChild(label)
+            // !this.allProperties.includes(p.id) ? this.allProperties.push(p.id) : p
+        })
+    }
 
+    
         
 
         // want to add event listener to take us to property show page
@@ -51,6 +54,14 @@ class Property{
         //     debugger
         // }
         
+    // }
+
+    // static newHerbForm(){
+    //     const checkbox = document.getElementsByClassName('checkbox')[0]
+    //     // const checkboxProperties = []
+    //     const cb = document.querySelectorAll('.cb')
+    //     this.appendCheckboxes(checkbox)
+    //     // cb.forEach(cb => !checkboxProperties.includes(parseInt(cb.id)) ? checkboxProperties.push(parseInt(cb.id)) : cb)
     // }
 
 }

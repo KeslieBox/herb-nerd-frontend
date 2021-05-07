@@ -1,4 +1,5 @@
 const herbsURL = 'http://localhost:3000/herbs'
+const container = document.getElementById('herbsContainer')
 class Herb {
     static allHerbs = []
 
@@ -28,6 +29,15 @@ class Herb {
     }
 
     static renderHerbs(herbs){
+        const div = document.createElement('div')
+        const ul = document.createElement('ul')
+        const herbForm = document.getElementById('herbForm')
+
+        ul.id = 'herbs'
+        div.innerHTML = '<h1>Encyclopedia of Herbs</h1>'
+        container.append(div)
+        div.append(ul)
+        herbForm.addEventListener('submit', e => this.postHerb(e))
         
         for(let herb of herbs){
             const h = new Herb(herb)
@@ -36,24 +46,23 @@ class Herb {
     }
 
     appendHerb(){
-        const div = document.getElementById('herbs')
-        const ul = document.createElement('ul')
+        // const div = getElementById('herbs')
+        const ul = document.getElementById('herbs')
         const li = document.createElement('li')
+        // div.innerText = 'Encyclopedia of Herbs'
         li.innerText = `${this.commonName} - ${this.latinName}`
+        ul.append(li) 
         li.addEventListener('click', e => this.herbProfile(e))
-        div.append(ul)
-        ul.append(li)    
+        // container.append(div)
+        // div.append(ul)
+        // div.append(ul)
+        // ul.append(li)   
     }
 
     herbProfile(e){
         e.preventDefault()
-        // should i define this globally?:
-        const container = document.getElementById("herbsContainer")
-        // const title = document.createElement('h1')
+      
         const par = document.createElement('p')
-        container.innerText = ""
-        // title.innerText = this.commonName
-        // container.append(title)
         // should i just hardcode this in index.html?:
         container.innerHTML = `
             <div id='herbProfile'</div>
@@ -61,16 +70,16 @@ class Herb {
                 <div id='latinName'></div>
                 <div id='properties'></div>
                 <div id='medicinalUses'></div>
-                <div id='history'></div>
                 <div id='spiritualUses'></div>
+                <div id='history'></div>
                 <button id="editBtn">Edit Herb Profile</button>
             </div>
         `
-        this.profileContentCreator(container, par)
+        this.profileContentCreator(par)
     }
 
     // trying to use HTML here instead of having to create div ids on a bunch of div variables
-    profileContentCreator(container, par){
+    profileContentCreator(par){
         // can i make these into an object or something?
         const title = document.getElementById('title')
         const latinName = document.getElementById('latinName')
@@ -82,11 +91,11 @@ class Herb {
        
         // should i just prefill this into the HTML string in herbProfile??
         title.innerHTML = `<h1>${this.commonName}</h1>`
-        latinName.innerHTML = `<h3>Latin Name:</h3>${this.latinName}<br><br>`
+        latinName.innerHTML = `<h3>Latin Name:</h3>${this.latinName}<br>`
         properties.innerHTML = `<h3>Medicinal Properties:</h3>`
-        medicinalUses.innerHTML = `<h3>Medicinal Uses:</h3>${this.medicinalUses}<br><br>`
-        history.innerHTML = `<h3>History:</h3> ${this.history}<br><br>`
-        spiritualUses.innerHTML = `<h3>Spiritual Uses:</h3>${this.spiritualUses}<br><br>`
+        medicinalUses.innerHTML = `<h3>Medicinal Uses:</h3>${this.medicinalUses}<br>`
+        spiritualUses.innerHTML = `<h3>Spiritual Uses:</h3>${this.spiritualUses}<br>`
+        history.innerHTML = `<h3>History:</h3> ${this.history}<br>`
 
         // how to extract more of this into appendPropertyToProfile?
         this.properties.forEach(p => par.innerHTML += `${p.name}, `)
@@ -98,10 +107,9 @@ class Herb {
 
     editForm(e){
         e.preventDefault()
-        const container = document.getElementById("herbsContainer")
         // where should this form live?:
         const form = `
-        <form id="herbForm">
+        <form id="editForm">
                 <h1>Edit Herb Profile:</h1><br>
                 <label>Common Name:</label>
                 <input id='common' type="text" value="${this.commonName}"><br>
@@ -112,51 +120,67 @@ class Herb {
                 <label>Medicinal Uses:</label><br>
                 <textarea rows = "5" cols = "60" id='medicinal' type="text_area" form='herbForm'>${this.medicinalUses}</textarea><br>
                 <label>Spiritual Uses:</label><br>
-                <textarea rows = "5" cols = "60" id='spiritual' type="text" value="${this.spiritualUses}"></textarea><br><br>
+                <textarea rows = "5" cols = "60" id='spiritual' type="text_area" form='herbForm'>${this.spiritualUses}</textarea><br><br>
                 <label>History:</label><br>
-                <textarea rows = "5" cols = "60" id='history' type="text" value="${this.history}"></textarea><br>
+                <textarea rows = "5" cols = "60" id='history' type="text_area" form='herbForm'>${this.history}</textarea><br>
                 <input id='submitBtn' type="submit" value="Edit Herb Profile">
-        </form><br> `
+        </form> `
         
         container.innerHTML = form
-        const formFound = document.getElementById('herbForm')
+        const formFound = document.getElementById('editForm')
         const checkbox = document.getElementsByClassName('checkbox')[0]
         this.appendCheckboxes(checkbox)
         
         formFound.addEventListener('submit', e => this.submitEdit(e))
     }
 
+    // should this stay here or since it's duplicated in properties should i find a way to leave it there?
     appendCheckboxes(checkbox){
         Property.allProperties.forEach(p => {
-            // need to know what herb i'm editing, if that herb is associated, fill in check box
-            
-            
             const cb = document.createElement('input')
             const label = document.createElement('label')
-            // how to keep this locally here instead of global?
-            // const checkboxes = []
-            label.innerText = p.name
-            label.id = p.id
-            // want to add event listener to take us to property show page:
-            // label.addEventListener('click', e => this.fetchProperty(e))
-            cb.setAttribute('type', 'checkbox')
-            // ###need to get value of checked boxes, not value of every property
-            // cb.value = p.name
-            cb.id = p.id
-            cb.className = 'cb'
-            checkbox.appendChild(cb)
-            checkbox.appendChild(label)
-            this.propertyIds.includes(p.id) ? cb.checked = true : cb.checked = false
-            // if checked, get value and add to herb's properties
-            // !checkboxProperties.includes(p) && cb.checked ? checkboxProperties.push(p) : cb  
+            if (document.getElementById('editForm')){
+                this.propertyIds.includes(p.id) ? cb.checked = true : cb.checked = false
+                 // how to keep this locally here instead of global?
+                // const checkboxes = []
+                label.innerText = p.name
+                label.id = p.id
+                // want to add event listener to take us to property show page:
+                // label.addEventListener('click', e => this.fetchProperty(e))
+                cb.setAttribute('type', 'checkbox')
+                cb.id = p.id
+                cb.className = 'cb'
+                checkbox.appendChild(cb)
+                checkbox.appendChild(label)
+            } 
+            // else {
+            //     label.innerText = p.name
+            //     label.id = p.id
+            //     // // want to add event listener to take us to property show page:
+            //     // // label.addEventListener('click', e => this.fetchProperty(e))
+            //     cb.setAttribute('type', 'checkbox')
+            //     cb.id = p.id
+            //     cb.className = 'cb'
+            //     checkbox.appendChild(cb)
+            //     checkbox.appendChild(label)
+            // }
+             
         })
     }
+
+    // aka appendCheckboxesToNewHerbForm? will it do anything else?
+    // newHerbForm(){
+
+    //     const checkbox = document.getElementsByClassName('checkbox')[0]
+    //     // const checkboxProperties = []
+    //     const cb = document.querySelectorAll('.cb')
+    //     this.appendCheckboxes(checkbox)
+    //     // cb.forEach(cb => !checkboxProperties.includes(parseInt(cb.id)) ? checkboxProperties.push(parseInt(cb.id)) : cb)
+    // }
 
     submitEdit(e){
         e.preventDefault()
         const checkboxProperties = []
-        // find checkboxes and if checked, get value and add to herb's properties when form submitted
-        // figure out which boxes are checked and populate array w the checked ones
         const checkbox = document.querySelectorAll('.cb')
         const common = document.getElementById('common').value
         const latin = document.getElementById('latin').value
@@ -164,14 +188,68 @@ class Herb {
         const history = document.getElementById('history').value
         const spiritual = document.getElementById('spiritual').value
 
-        for(let cb of checkbox){
-            // get id values of these properties and get array of just id values
-            cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb 
-        }
-        console.log('cb:', checkboxProperties)
+        checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
 
         const options = {
             method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                herb: {
+                    common_name: common,
+                    latin_name: latin,
+                    property_ids: checkboxProperties,
+                    medicinal_uses: medicinal,
+                    history: history,
+                    spiritual_uses: spiritual
+                }
+            })
+        }
+
+        fetch(`http://localhost:3000/herbs/${this.id}`, options)
+        .then(resp => resp.json())
+        .then(herbObj => {
+            console.log('h:', herbObj)
+            const herb = Herb.allHerbs.find(h => h.id === herbObj.id)
+            herb.updateAttributes(herbObj)
+            // go back to herb profile after updated
+            console.log(this)
+            herb.herbProfile(e)
+        })
+    }
+
+    updateAttributes(herbObj){
+        this.commonName = herbObj.commonName
+        this.latinName = herbObj.latinName
+        this.spiritualUses = herbObj.spiritualUses
+        this.history = herbObj.history
+        this.medicinalUses = herbObj.medicinalUses
+        this.propertyIds = herbObj.propertyIds
+    }
+
+    
+    static postHerb(){
+        event.preventDefault()
+        // const checkbox = document.getElementsByClassName('checkbox')[0]
+        
+
+        // this.appendCheckboxes(checkbox)
+        const checkboxProperties = []
+        const checkbox = document.querySelectorAll('.cb')
+        const common = document.getElementById('common').value
+        const latin = document.getElementById('latin').value
+        const properties = document.getElementById('properties').value
+        const medicinal = document.getElementById('medicinal').value
+        const history = document.getElementById('history').value
+        const spiritual = document.getElementById('spiritual').value
+
+        checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
+
+
+        const options = {
+            method: 'POST',
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
@@ -190,61 +268,14 @@ class Herb {
             })
         }
 
-        fetch(`http://localhost:3000/herbs/${this.id}`, options)
-        .then(resp => resp.json())
-        .then(herbObj => {
-            console.log('h:', herbObj)
-            const herb = Herb.allHerbs.find(h => h.id === herbObj.id)
-            herb.updateAttributes(herbObj)
-        })
-    }
-
-    updateAttributes(herbObj){
-        this.commonName = herbObj.commonName
-        this.latinName = herbObj.latinName
-        this.spiritualUses = herbObj.spiritualUses
-        this.history = herbObj.history
-        this.medicinalUses = herbObj.medicinalUses
-        this.propertyIds = herbObj.propertyIds
-    }
-
-    static postHerb(){
-        event.preventDefault()
-        const common = document.getElementById('common').value
-        const latin = document.getElementById('latin').value
-        const properties = document.getElementById('properties').value
-        const medicinal = document.getElementById('medicinal').value
-        const history = document.getElementById('history').value
-        const spiritual = document.getElementById('spiritual').value
-
-
-        const options = {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify({
-                herb: {
-                    // should i have id in here?
-                    // id: id,
-                    common_name: common,
-                    latin_name: latin,
-                    properties: properties,
-                    medicinal_uses: medicinal,
-                    history: history,
-                    spiritual_uses: spiritual
-                }
-            })
-        }
-
        event.target.reset()
 
         fetch(herbsURL, options)
         .then(resp => resp.json())
         .then(herbObj => {
+            debugger
             let herb = new Herb(herbObj)
-            herb.displayHerb()
+            herb.appendHerb()
         })
     }
 

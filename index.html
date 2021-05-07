@@ -9,7 +9,8 @@
     <body> 
         <nav class="navbar navbar-inverse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="file://wsl%24/Ubuntu/home/idmiod/Development/code/Phase4/herb_nerd/herb_nerd_frontend/index.html">Home</a></li>
+                <li id='homeLink'>Home</li>
+                <li class="active" id='encyclopedia'>Encyclopedia</li>
             </ul>
         </nav>
         <div id="herbsContainer">
@@ -21,21 +22,23 @@
                 <input id='latin' type="text"><br>
                 <label>Properties</label>
                 <input id='properties' type="text"><br>
+                <span class='checkbox'></span><br><br>
                 <label>Medicinal Uses</label>
                 <input id='medicinal' type="text"><br>
                 <label>Spiritual Uses</label>
-                <input id='spiritual' type="text"><br><br>
+                <input id='spiritual' type="text"><br>
                 <label>History</label>
                 <input id='history' type="text"><br>
                 <input type="submit" value="Add Herb to Herb Nerd Encyclopedia">
             </form><br>
-            <div id="herbs">
+            <!-- <div id="herbs">
                 <h1>Encyclopedia of Herbs</h1>
-            </div>
+            </div> -->
         </div>
         <script src="src/quality.js" charset="utf-8"></script>
         <script src="src/property.js" charset="utf-8"></script>
         <script src="src/herb.js" charset="utf-8"></script>
         <script src="src/index.js" charset="utf-8"></script> 
+        <script src="src/homepage.js" charset="utf-8"></script> 
     </body>
 </html>
