@@ -12,19 +12,23 @@ class Property{
             .then(resp => resp.json())
             .then(properties => { 
                 properties.forEach(p => {
-                    if (!Property.allProperties.includes(p)){
+                    if (!Property.allProperties.includes(p) && p.name){
                         new Property(p)
+                    // }else if(Property.allProperties.includes(p) && p.name){
+
+                    // }else {
+                    //     throw new Error(p.message)
                     }
                 })
                 this.appendCheckboxes()
-            })
+            }).catch(err => alert(err))
     }
 
 
     // how to use the method from the herb class instead of rewriting??
     static appendCheckboxes(){
         const checkbox = document.getElementsByClassName('checkbox')[0]
-        const cb = document.querySelectorAll('.cb')
+        // const cb = document.querySelectorAll('.cb')
         this.allProperties.forEach(p => {
             const cb = document.createElement('input')
             const label = document.createElement('label')
@@ -46,7 +50,6 @@ class Property{
     //     debugger
     // }
         
-    
 
     // static newHerbForm(){
     //     const checkbox = document.getElementsByClassName('checkbox')[0]
@@ -61,6 +64,8 @@ class Property{
         const propertiesInput = []
         // const properties = document.getElementById('properties').value.toLowerCase().split(', ')
         
+        // can i use map here?
+        // array of property values split by ',' from form input:
         properties.forEach(p => {
             if (!propertiesInput.includes(p) && !Property.allProperties.includes(p)) {
                 propertiesInput.push(p)
@@ -83,8 +88,6 @@ class Property{
                 }
             })
         }
-
-       event.target.reset()
 
         fetch('http://localhost:3000/properties', options)
             .then(resp => resp.json())

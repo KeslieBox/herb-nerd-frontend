@@ -24,8 +24,17 @@ class Herb {
             .then(resp => resp.json())
             .then(herbs => {
                 // do i need to create new herb here for frontend?
-                this.renderHerbs(herbs)
-            })
+                if (herbs){
+                    this.renderHerbs(herbs)
+                    for(let herb of herbs){
+                        const h = new Herb(herb)
+                        h.appendHerb()
+                    }
+                    // this.renderHerbs(herbs)
+                } else {
+                    throw new Error(herb.message)
+                }
+            }).catch(err => alert(err))
     }
 
     static renderHerbs(herbs){
@@ -38,14 +47,16 @@ class Herb {
         container.append(div)
         div.append(ul)
         herbForm.addEventListener('submit', e => this.postHerb(e))
-        
-        for(let herb of herbs){
-            const h = new Herb(herb)
-            h.appendHerb()
-        }
+
+        // for(let herb of herbs){
+        //     const h = new Herb(herb)
+        //     h.appendHerb()
+        // }    
+       
     }
 
     appendHerb(){
+        // debugger
         // const div = getElementById('herbs')
         const ul = document.getElementById('herbs')
         const li = document.createElement('li')
@@ -115,14 +126,14 @@ class Herb {
                 <input id='common' type="text" value="${this.commonName}"><br>
                 <label>Latin Name:</label>
                 <input id='latin' type="text" value="${this.latinName}"><br><br>
-                <label id='prop'>Medicinal Properties:</label>
-                <span class='checkbox'></span><br><br>
                 <label>Medicinal Uses:</label><br>
                 <textarea rows = "5" cols = "60" id='medicinal' type="text_area" form='herbForm'>${this.medicinalUses}</textarea><br>
                 <label>Spiritual Uses:</label><br>
                 <textarea rows = "5" cols = "60" id='spiritual' type="text_area" form='herbForm'>${this.spiritualUses}</textarea><br><br>
                 <label>History:</label><br>
                 <textarea rows = "5" cols = "60" id='history' type="text_area" form='herbForm'>${this.history}</textarea><br>
+                <label id='prop'>Medicinal Properties:</label>
+                <span class='checkbox'></span><br>
                 <input id='submitBtn' type="submit" value="Edit Herb Profile">
         </form> `
         
@@ -228,14 +239,10 @@ class Herb {
         this.medicinalUses = herbObj.medicinalUses
         this.propertyIds = herbObj.propertyIds
     }
-
     
-    static postHerb(){
-        event.preventDefault()
-        // const checkbox = document.getElementsByClassName('checkbox')[0]
-        
+    static postHerb(e){
+        e.preventDefault()
 
-        // this.appendCheckboxes(checkbox)
         const checkboxProperties = []
         const checkbox = document.querySelectorAll('.cb')
         const common = document.getElementById('common').value
@@ -245,10 +252,12 @@ class Herb {
         const history = document.getElementById('history').value
         const spiritual = document.getElementById('spiritual').value
         checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
-        // iterate through an array of properties created through text input and add to checkboxProperties array??
 
-        if(properties){
-            Property.newPropertyCheck(properties)
+        let properties_attributes = {}
+        for(let i=0; i < properties.length; i++){
+            let o ={}
+            o[i] = {name: properties[i]}
+            properties_attributes = Object.assign(properties_attributes, o)
         }
 
         const options = {
@@ -259,11 +268,10 @@ class Herb {
             },
             body: JSON.stringify({
                 herb: {
-                    // should i have id in here?
-                    // id: id,
                     common_name: common,
                     latin_name: latin,
                     property_ids: checkboxProperties,
+                    properties_attributes: properties_attributes,
                     medicinal_uses: medicinal,
                     history: history,
                     spiritual_uses: spiritual
@@ -271,15 +279,23 @@ class Herb {
             })
         }
 
-       event.target.reset()
-
+    //    e.target.reset()
         fetch(herbsURL, options)
-        .then(resp => resp.json())
-        .then(herbObj => {
-            let herb = new Herb(herbObj)
-            herb.appendHerb()
-        })
+            .then(resp => resp.json())
+            .then(herbObj => {
+                if(herbObj.commonName && herbObj.latinName && herbObj.properties){
+                    const herb = new Herb(herbObj)
+                    herb.appendHerb()
+                    herbObj.properties.forEach(p => new Property(p)) 
+                } else if (herbObj.commonName && herbObj.latinName){
+                    const herb = new Herb(herbObj)
+                    herb.appendHerb()
+                } else if (herbObj.properties){
+                    herbObj.properties.forEach(p => new Property(p)) 
+                } else {
+                    throw new Error(herbObj.message)
+                }
+            }).catch((err) => alert(err))
     }
-
-    
 }
+
