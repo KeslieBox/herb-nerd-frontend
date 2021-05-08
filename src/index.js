@@ -1,8 +1,18 @@
+// Property.fetchProperties()
 Herb.fetchHerbs()
 Property.fetchProperties()
 // const herbForm = document.getElementById('herbForm')
-const encyclopedia = document.getElementById('encyclopedia')
+const encycNav = document.getElementById('encyc-nav')
+const newHerbNav = document.getElementById('newHerb-nav')
 
 // herbForm.addEventListener('submit', e => Herb.postHerb(e))
-encyclopedia.addEventListener('click', e => Herb.renderHerbs(Herb.allHerbs))
 
+encycNav.addEventListener('click', e => {
+    e.preventDefault()
+    Herb.clearContainer()
+    Herb.renderHerbs(Herb.allHerbs)
+})
+
+// newHerbNav.addEventListener('click', e => {
+//     // call newHerbForm 
+// })

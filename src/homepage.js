@@ -1,6 +1,6 @@
 const homeLink = document.getElementById('homeLink')
 
-homeLink.addEventListener('click', e => showHomepage(e))
+// homeLink.addEventListener('click', e => showHomepage(e))
 
 function showHomepage(e){
     e.preventDefault()

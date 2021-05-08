@@ -5,12 +5,12 @@ class Herb {
 
     constructor({id, latinName, history, commonName, medicinalUses, spiritualUses, propertyIds}){
         // do i need id?
-        this.id = id || ""
-        this.commonName = commonName || ""
-        this.latinName = latinName || ""
-        this.medicinalUses = medicinalUses || ""
-        this.history = history || ""
-        this.spiritualUses = spiritualUses || ""
+        this.id = id 
+        this.commonName = commonName || "Looks like no one has added anything here yet, go head and be the first to tell us what you know!"
+        this.latinName = latinName || "Looks like no one has added anything here yet, go head and be the first to tell us what you know!"
+        this.medicinalUses = medicinalUses || "Looks like no one has added anything here yet, go head and be the first to tell us what you know!"
+        this.history = history || "Looks like no one has added anything here yet, go head and be the first to tell us what you know!"
+        this.spiritualUses = spiritualUses || "Looks like no one has added anything here yet, go head and be the first to tell us what you know!"
         this.propertyIds = propertyIds 
         Herb.allHerbs.push(this)
     }
@@ -25,58 +25,66 @@ class Herb {
             .then(herbs => {
                 // do i need to create new herb here for frontend?
                 if (herbs){
-                    this.renderHerbs(herbs)
+                    // this.renderHerbs()
                     for(let herb of herbs){
                         const h = new Herb(herb)
-                        h.appendHerb()
+                        // h.appendHerb()
                     }
-                    // this.renderHerbs(herbs)
+                    this.renderHerbs()
                 } else {
                     throw new Error(herb.message)
                 }
             }).catch(err => alert(err))
     }
 
-    static renderHerbs(herbs){
+    static clearContainer(){
+        container.innerHTML = ""
+    }
+
+    static renderHerbs(){
         const div = document.createElement('div')
         const ul = document.createElement('ul')
         const herbForm = document.getElementById('herbForm')
 
         ul.id = 'herbs'
         div.innerHTML = '<h1>Encyclopedia of Herbs</h1>'
+        div.id = 'encyclopedia'
         container.append(div)
         div.append(ul)
+        // debugger
+        // function for new herb form
+        // const herbForm = document.createElement('form')
         herbForm.addEventListener('submit', e => this.postHerb(e))
 
         // for(let herb of herbs){
-        //     const h = new Herb(herb)
-        //     h.appendHerb()
-        // }    
+        //     console.log(herb)
+        //     debugger
+        //     // herb.appendHerb()
+        // }   
+        
+        for(let herb of Herb.allHerbs){
+            console.log(herb)
+            herb.appendHerb()
+        } 
+        // Herb.allHerbs.forEach(herb => herb.appendHerb()) 
        
     }
 
     appendHerb(){
         // debugger
-        // const div = getElementById('herbs')
         const ul = document.getElementById('herbs')
         const li = document.createElement('li')
-        // div.innerText = 'Encyclopedia of Herbs'
         li.innerText = `${this.commonName} - ${this.latinName}`
         ul.append(li) 
         li.addEventListener('click', e => this.herbProfile(e))
-        // container.append(div)
-        // div.append(ul)
-        // div.append(ul)
-        // ul.append(li)   
     }
 
     herbProfile(e){
         e.preventDefault()
-      
         const par = document.createElement('p')
         // should i just hardcode this in index.html?:
         container.innerHTML = `
-            <div id='herbProfile'</div>
+            <div id='herbProfile'>
                 <div id='title'></div>
                 <div id='latinName'></div>
                 <div id='properties'></div>
@@ -116,6 +124,29 @@ class Herb {
         editBtn.addEventListener('click', (e) => this.editForm(e))
     }
 
+    newHerbForm(e){
+        e.preventDefault()
+        const form = `
+        <form id="herbForm">
+                <h1>Create a New Herb Profile:</h1><br>
+                <label>Common Name</label><br>
+                <input id='common' class="herbform" type="text"><br>
+                <label>Latin Name</label><br>
+                <input id='latin' class="herbform" type="text"><br>
+                <label>Medicinal Uses</label><br>
+                <input id='medicinal' class="herbform" type="text"><br>
+                <label>Spiritual Uses</label><br>
+                <input id='spiritual' class="herbform" type="text"><br>
+                <label>History</label><br>
+                <input id='history' class="herbform" type="text"><br>
+                <label>Medicinal Properties</label>
+                <span>Use comma-separated-values, ie astringent, vulnerary</span><br>
+                <input id='properties' class="herbform" type="text"><br>
+                <span class='checkbox'></span>
+                <input type="submit" value="Create New Herb Profile">
+            </form>`
+    }
+
     editForm(e){
         e.preventDefault()
         // where should this form live?:
@@ -123,15 +154,15 @@ class Herb {
         <form id="editForm">
                 <h1>Edit Herb Profile:</h1><br>
                 <label>Common Name:</label>
-                <input id='common' type="text" value="${this.commonName}"><br>
+                <input id='common' class="herbform" type="text" value="${this.commonName}"><br>
                 <label>Latin Name:</label>
-                <input id='latin' type="text" value="${this.latinName}"><br><br>
+                <input id='latin' class="herbform" type="text" value="${this.latinName}"><br><br>
                 <label>Medicinal Uses:</label><br>
-                <textarea rows = "5" cols = "60" id='medicinal' type="text_area" form='herbForm'>${this.medicinalUses}</textarea><br>
+                <textarea rows = "5" cols = "60" id='medicinal' class="textarea" type="text_area" form='herbForm'>${this.medicinalUses}</textarea><br>
                 <label>Spiritual Uses:</label><br>
-                <textarea rows = "5" cols = "60" id='spiritual' type="text_area" form='herbForm'>${this.spiritualUses}</textarea><br><br>
+                <textarea rows = "5" cols = "60" id='spiritual' class="textarea" type="text_area" form='herbForm'>${this.spiritualUses}</textarea><br>
                 <label>History:</label><br>
-                <textarea rows = "5" cols = "60" id='history' type="text_area" form='herbForm'>${this.history}</textarea><br>
+                <textarea rows = "5" cols = "60" id='history' class="textarea" type="text_area" form='herbForm'>${this.history}</textarea><br>
                 <label id='prop'>Medicinal Properties:</label>
                 <span class='checkbox'></span><br>
                 <input id='submitBtn' type="submit" value="Edit Herb Profile">
@@ -255,9 +286,12 @@ class Herb {
 
         let properties_attributes = {}
         for(let i=0; i < properties.length; i++){
-            let o ={}
-            o[i] = {name: properties[i]}
-            properties_attributes = Object.assign(properties_attributes, o)
+            // if current property name does not match the name of any properties in checkboxProperties...need to somehow get property name of checkbox properties, maybe can get through the html element id?? 
+            // if (!checkboxProperties.includes(properties[i])){
+                let o ={}
+                o[i] = {name: properties[i]}
+                properties_attributes = Object.assign(properties_attributes, o)
+            // }
         }
 
         const options = {
@@ -279,7 +313,7 @@ class Herb {
             })
         }
 
-    //    e.target.reset()
+       e.target.reset()
         fetch(herbsURL, options)
             .then(resp => resp.json())
             .then(herbObj => {

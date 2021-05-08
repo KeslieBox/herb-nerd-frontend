@@ -4,38 +4,47 @@
         <meta charset="utf-8">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="index.css" />
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300&display=swap" rel="stylesheet">
+        
+        
         <title></title>
     </head>
     <body> 
         <nav class="navbar navbar-inverse">
             <ul class="nav navbar-nav">
-                <li id='homeLink'>Home</li>
-                <li class="active" id='encyclopedia'>Encyclopedia</li>
+                <!-- <li class="nav-li" id='homeLink'>Home</li> -->
+                <li class="nav-li" id='encyc-nav'>Encyclopedia</li>
+                <li class="nav-li" id='newHerb-nav'>Add New Herb</li>
+                
             </ul>
         </nav>
         <div id="herbsContainer">
             <form id="herbForm">
                 <h1>Create a New Herb Profile:</h1><br>
-                <label>Common Name</label>
-                <input id='common' type="text"><br>
-                <label>Latin Name</label>
-                <input id='latin' type="text"><br>
-                <label>Medicinal Uses</label>
-                <input id='medicinal' type="text"><br>
-                <label>Spiritual Uses</label>
-                <input id='spiritual' type="text"><br>
-                <label>History</label>
-                <input id='history' type="text"><br>
+                <label>Common Name</label><br>
+                <input id='common' class="herbform" type="text"><br>
+                <label>Latin Name</label><br>
+                <input id='latin' class="herbform" type="text"><br>
+                <label>Medicinal Uses</label><br>
+                <input id='medicinal' class="herbform" type="text"><br>
+                <label>Spiritual Uses</label><br>
+                <input id='spiritual' class="herbform" type="text"><br>
+                <label>History</label><br>
+                <input id='history' class="herbform" type="text"><br>
                 <label>Medicinal Properties</label>
-                <input id='properties' type="text"><br>
+                <span>Use comma-separated-values, ie astringent, vulnerary</span><br>
+                <input id='properties' class="herbform" type="text"><br>
                 <span class='checkbox'></span>
                 <input type="submit" value="Create New Herb Profile">
             </form>
         </div>
-        <script src="src/quality.js" charset="utf-8"></script>
+        <!-- <image src="https://images.pexels.com/photos/165228/pexels-photo-165228.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" class="img1"></image> -->
+        <!-- <script src="src/quality.js" charset="utf-8"></script> -->
         <script src="src/property.js" charset="utf-8"></script>
         <script src="src/herb.js" charset="utf-8"></script>
         <script src="src/index.js" charset="utf-8"></script> 
-        <script src="src/homepage.js" charset="utf-8"></script> 
+        <!-- <script src="src/homepage.js" charset="utf-8"></script>  -->
     </body>
 </html>

@@ -1,8 +1,203 @@
+.navbar-inverse {
+    background-color: black;
+    border-color: black;
+}
+
+.nav>li {
+    position: relative;
+    display: block;
+    font-family: 'Satisfy';
+    font-size: 25px;
+    margin-left: 22px;
+    background-color: black;
+    color: oldlace
+}
+
 .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
     margin-top: 4px\9;
     margin-left: 5px;
     margin-right: -18px;
 }
+
+.h1, h1 {
+    font-size: 36px;
+    font-family: Satisfy;
+    text-align: center;
+}
+
+form {
+    border-color: black;
+    margin-left: 11%;
+    margin-right: 54%;
+    margin-top: 5%;
+    margin-bottom: 3%;
+    background-color: #fdf5e6cc;
+    padding-top: 16px;
+    padding-bottom: 12px;
+    padding-left: 49px;
+    padding-right: 52px;
+    border-top-style: solid;
+    border-left-style: solid;
+    border-bottom-style: solid;
+    border-right: solid;
+    border-width: 11px;
+}
+
+label {
+    display: inline-block;
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+    font-family: monospace;
+    font-size: 18px;
+}
+
+.checkbox label, .radio label {
+    min-height: 20px;
+    padding-left: 20px;
+    margin-bottom: 0;
+    font-weight: 400;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input, select, textarea {
+    font-size: 17px;
+    line-height: inherit;
+    background-color: #fdf5e62e;
+    font-family: monospace;
+}
+
+  textarea {
+    overflow: auto;
+    height: 133px;
+    width: 540px;
+  }
+
+  button, html input[type=button], input[type=reset], input[type=submit] {
+    -webkit-appearance: button;
+    cursor: pointer;
+    font-size: 19px;
+    margin-left: 167px;
+    padding-right: 7px;
+    padding-left: 6px;
+    background-color: #fdf5e62e;
+}
+
+
+#encyclopedia {
+    margin-left: 812px;
+    margin-top: -757px;
+    margin-right: 191px;
+    z-index: 100;
+    background-color: #fdf5e6cc;
+    padding-top: 16px;
+    padding-bottom: 42px;
+    padding-left: 49px;
+    padding-right: 52px;
+    border-top-style: solid;
+    border-left-style: solid;
+    border-bottom-style: solid;
+    border-right: solid;
+    border-width: 11px;
+    border-color: black;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+    font-size: 17px;
+    line-height: inherit;
+    background-color: #fdf5e62e;
+    font-family: monospace;
+    text-decoration: underline;
+}
+
+/* #herbProfile {
+    background-color: #fdf5e6cc;
+    margin-left: 478px;
+    margin-right: 486px;
+    margin-top: 56px;
+    padding-left: 53px;
+    padding-right: 17px;
+    padding-top: 18px;
+    padding-bottom: 23px;
+    border-top-style: solid;
+    border-left-style: solid;
+    border-bottom-style: solid;
+    border-right: solid;
+    border-width: 11px;
+    border-color: black;
+    font-family: 'Satisfy';
+    font-size: 19px;
+} */
+
+#herbProfile {
+    background-color: #fdf5e6cc;
+    margin-left: 478px;
+    margin-right: 486px;
+    margin-top: 56px;
+    padding-left: 53px;
+    padding-right: 17px;
+    padding-top: 18px;
+    padding-bottom: 23px;
+    border-top-style: solid;
+    border-left-style: solid;
+    border-bottom-style: solid;
+    border-right: solid;
+    border-width: 11px;
+    border-color: black;
+    font-family: monospace;
+    font-size: 17px;
+}
+
+#editBtn {
+    margin-left: 259px;
+    margin-top: 24px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+#editForm {
+    background-color: #fdf5e6cc;
+    margin-left: 439px;
+    margin-right: 435px;
+    margin-top: 56px;
+    padding-left: 39px;
+    padding-right: 17px;
+    padding-top: 18px;
+    padding-bottom: 23px;
+    border-top-style: solid;
+    border-left-style: solid;
+    border-bottom-style: solid;
+    border-right: solid;
+    border-width: 11px;
+    border-color: black;
+    font-family: monospace;
+    font-size: 17px;
+}
+
+/* .img {
+ 
+  position: absolute;
+  margin-left: 544px;
+  width: 519px;
+  opacity: .5;
+  z-index: 1;
+  margin-top: 0px;
+} */
+
+body {
+    background-image: url("https://images.pexels.com/photos/165228/pexels-photo-165228.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    opacity: 2;
+}
+
+
+
+/* navbar css if removing bootstrap */
 
 /* 
 .navbar-nav>li {
