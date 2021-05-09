@@ -8,6 +8,12 @@ const container = document.getElementById('herbsContainer')
 // const history = document.getElementById('history').value
 // const spiritual = document.getElementById('spiritual').value
 
+function alphabetize(){
+    if (a.name < b.name) {return -1}
+    if (a.name > b.name) {return 1}
+    return 0
+}
+
 class Herb {
     static allHerbs = []
 
@@ -52,26 +58,23 @@ class Herb {
     static renderHerbs(){
         const div = document.createElement('div')
         const ul = document.createElement('ul')
-        // const herbForm = document.getElementById('herbForm')
         ul.id = 'herbs'
         div.innerHTML = '<h1>Encyclopedia of Herbs</h1>'
         div.id = 'encyclopedia'
         container.append(div)
         div.append(ul)
-        // debugger
-        // function for new herb form
-        // const herbForm = document.createElement('form')
-        // herbForm.addEventListener('submit', e => {
-        //     debugger
-        //     // this.newHerbProperties(e)
-        //     this.postHerb(e)
-        //     debugger
-        // }) 
-        
-        for(let herb of Herb.allHerbs){
-            herb.appendHerb()
-        } 
-        // Herb.allHerbs.forEach(herb => herb.appendHerb()) 
+
+        // how to get this to work w/ appendHerb() which needs instance of herb class
+        // const mapped = this.allHerbs.map(h => h.commonName).sort()
+      
+        // clean this up/ make dynamic
+        // this.allHerbs.sort(alphabetize(commonName))???
+        this.allHerbs.sort((a, b) => {
+            if (a.commonName < b.commonName) {return -1}
+            if (a.commonName > b.commonName) {return 1}
+            return 0
+        })
+        for(let herb of this.allHerbs){ herb.appendHerb()} 
        
     }
 
@@ -81,7 +84,6 @@ class Herb {
         ul.id = 'herbs'
         li.innerText = `${this.commonName} - ${this.latinName}`
         ul.append(li) 
-        console.log(ul)
         li.addEventListener('click', e => this.herbProfile(e))
     }
 
@@ -139,14 +141,18 @@ class Herb {
                 <input id='common' class="herbform" type="text"><br>
                 <label>Latin Name</label><br>
                 <input id='latin' class="herbform" type="text"><br>
-                <label>Medicinal Uses</label><br>
-                <input id='medicinal' class="herbform" type="text"><br>
-                <label>Spiritual Uses</label><br>
-                <input id='spiritual' class="herbform" type="text"><br>
-                <label>History</label><br>
-                <input id='history' class="herbform" type="text"><br>
-                <label>Medicinal Properties</label>
-                <span>Use comma-separated-values, ie astringent, vulnerary</span><br>
+                <label>Medicinal Uses:</label><br>
+                <textarea rows = "5" cols = "60" id='medicinal' class="textarea" type="text_area" form='herbForm'>${this.medicinalUses || ""}</textarea><br>
+                <label>Spiritual Uses:</label><br>
+                <textarea rows = "5" cols = "60" id='spiritual' class="textarea" type="text_area" form='herbForm'>${this.spiritualUses || ""}</textarea><br>
+                <label>History:</label><br>
+                <textarea rows = "5" cols = "60" id='history' class="textarea" type="text_area" form='herbForm'>${this.history || ""}</textarea><br>
+                <label>Medicinal Properties:</label><br>
+                    <ul>
+                        <li>You can use a combination of checkboxes & manual entry</li>
+                        <li>Use comma-separated-values, ie astringent, vulnerary</li>
+                        <li>Don't worry about entering something twice</li>
+                    </ul>
                 <input id='properties' class="herbform" type="text"><br>
                 <span class='checkbox'></span>
                 <input type="submit" value="Create New Herb Profile">
@@ -164,9 +170,12 @@ class Herb {
     }
 
     static appendCheckboxes(){
-        // why is checkbox empty?
         const checkbox = document.getElementsByClassName('checkbox')[0]
-        // const cb = document.querySelectorAll('.cb')
+        Property.allProperties.sort((a, b) => {
+            if (a.name < b.name) {return -1}
+            if (a.name > b.name) {return 1}
+            return 0
+        })
         Property.allProperties.forEach(p => {
             const cb = document.createElement('input')
             const label = document.createElement('label')
@@ -284,7 +293,7 @@ class Herb {
 
         let properties_attributes = {}
         for(let i=0; i < properties.length; i++){
-            let o ={}
+            let o = {}
             o[i] = {name: properties[i]}
             properties_attributes = Object.assign(properties_attributes, o)
         }

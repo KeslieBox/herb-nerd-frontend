@@ -44,6 +44,14 @@ form, #editForm {
     font-size: 17px;
 }
 
+input, select, textarea {
+    font-size: 17px;
+    line-height: inherit;
+    background-color: #fdf5e62e;
+    font-family: monospace;
+    width: 539px;
+}
+
 label {
     display: inline-block;
     max-width: 100%;
@@ -75,7 +83,7 @@ input, select, textarea {
     width: 540px;
   }
 
-  button, html input[type=button], input[type=reset], input[type=submit] {
+button, html input[type=button], input[type=reset], input[type=submit] {
     -webkit-appearance: button;
     cursor: pointer;
     font-size: 19px;
@@ -83,6 +91,14 @@ input, select, textarea {
     padding-right: 7px;
     padding-left: 6px;
     background-color: #fdf5e62e;
+    width: auto;
+}
+
+.checkbox input[type=checkbox], .checkbox-inline input[type=checkbox]{
+    margin-top: 4px\9;
+    margin-left: 5px;
+    margin-right: -18px;
+    width: fit-content;
 }
 
 #editBtn {
@@ -117,6 +133,9 @@ li {
     line-height: inherit;
     background-color: #fdf5e62e;
     font-family: monospace;
+}
+
+#herbs{
     text-decoration: underline;
 }
 

@@ -7,6 +7,7 @@ class Property {
         Property.allProperties.push(this)
     }
 
+    // not using this yet
     static fetchProperties(){
         fetch('http://localhost:3000/properties')
             .then(resp => resp.json())
@@ -52,23 +53,8 @@ class Property {
     // fetchProperty(e){
     //     debugger
     // }
-        
-// dont think I need this
-    // static newPropertyCheck(properties){
-        
-    //     const propertiesInput = []
-    //     // const properties = document.getElementById('properties').value.toLowerCase().split(', ')
-        
-    //     // can i use map here?
-    //     // array of property values split by ',' from form input:
-    //     properties.forEach(p => {
-    //         if (!propertiesInput.includes(p) && !Property.allProperties.includes(p)) {
-    //             propertiesInput.push(p)
-    //             this.postProperty(p)
-    //         }
-    //     })
-    // }
-    
+
+    // not using this yet
     static postProperty(p){
        
         const options = {
