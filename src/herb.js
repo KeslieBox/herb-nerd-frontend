@@ -76,19 +76,17 @@ class Herb {
     }
 
     appendHerb(){
-        debugger
         const ul = document.getElementById('herbs') || document.createElement('ul')
         const li = document.createElement('li')
         ul.id = 'herbs'
         li.innerText = `${this.commonName} - ${this.latinName}`
         ul.append(li) 
         console.log(ul)
-        debugger
         li.addEventListener('click', e => this.herbProfile(e))
     }
 
     herbProfile(e){
-        e.preventDefault()
+        if(e) {e.preventDefault()}
         const par = document.createElement('p')
         // should i just hardcode this in index.html?:
         container.innerHTML = `
@@ -126,7 +124,6 @@ class Herb {
 
         // how to extract more of this into appendPropertyToProfile?
         this.properties.forEach(p => par.innerHTML += `${p.name}, `)
-        debugger
         properties.append(par)
 
         editBtn.addEventListener('click', (e) => this.editForm(e))
@@ -270,7 +267,6 @@ class Herb {
     }
     
     static newHerbProperties(e){
-        debugger
         e.preventDefault()
         const common = document.getElementById('common').value
         const latin = document.getElementById('latin').value
@@ -302,14 +298,12 @@ class Herb {
             history: history,
             spiritual_uses: spiritual
         }}
-        debugger
 
         this.postHerb(e, herbAttributes)
     }
 
     static postHerb(e, herbAttributes){
         e.preventDefault()
-        debugger
         // const common = document.getElementById('common').value
         // const latin = document.getElementById('latin').value
         // const properties = document.getElementById('properties').value.toLowerCase().split(', ')
@@ -350,7 +344,6 @@ class Herb {
             // })
             body: JSON.stringify(herbAttributes)
         }
-        debugger
 
        e.target.reset()
 
@@ -361,12 +354,13 @@ class Herb {
                 if(herbObj.commonName && herbObj.latinName && herbObj.properties){
                     debugger
                     const herb = new Herb(herbObj)
-                    herb.appendHerb()
                     herb.herbProfile()
-                    herbObj.properties.forEach(p => new Property(p)) 
+                    // do i need to check length on p.name to make sure it doesn't save empty strings?
+                    herbObj.properties.forEach(p => {if (!Property.allProperties.includes(p) && p.name) {new Property(p)}}) 
+                // do i need to check length on common and latin names to make sure it doesn't save empty strings?
                 } else if (herbObj.commonName && herbObj.latinName){
                     const herb = new Herb(herbObj)
-                    herb.appendHerb()
+                    herb.herbProfile()
                 } else if (herbObj.properties){
                     herbObj.properties.forEach(p => new Property(p)) 
                 } else {
