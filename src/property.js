@@ -1,4 +1,4 @@
-class Property{
+class Property {
     static allProperties = []
 
     constructor({id, name}){
@@ -34,10 +34,11 @@ class Property{
             const label = document.createElement('label')
             label.innerText = p.name
             label.id = p.id
-            // want to add event listener to take us to property show page:
+            // want to add event listener to take us to property show page w/ definition:
             // label.addEventListener('click', e => this.fetchProperty(e))
             cb.setAttribute('type', 'checkbox')
             cb.id = p.id
+            cb.name = p.name
             cb.className = 'cb'
             checkbox.appendChild(cb)
             checkbox.appendChild(label)

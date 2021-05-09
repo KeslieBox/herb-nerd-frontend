@@ -4,13 +4,13 @@ class Herb {
     static allHerbs = []
 
     constructor({id, latinName, history, commonName, medicinalUses, spiritualUses, propertyIds}){
-        // do i need id?
+        const blankInputText = "Looks like no one has added anything here yet, go head and be the first to tell us what you know!"
         this.id = id 
-        this.commonName = commonName || "Looks like no one has added anything here yet, go head and be the first to tell us what you know!"
-        this.latinName = latinName || "Looks like no one has added anything here yet, go head and be the first to tell us what you know!"
-        this.medicinalUses = medicinalUses || "Looks like no one has added anything here yet, go head and be the first to tell us what you know!"
-        this.history = history || "Looks like no one has added anything here yet, go head and be the first to tell us what you know!"
-        this.spiritualUses = spiritualUses || "Looks like no one has added anything here yet, go head and be the first to tell us what you know!"
+        this.commonName = commonName 
+        this.latinName = latinName 
+        this.medicinalUses = medicinalUses || blankInputText
+        this.history = history || blankInputText
+        this.spiritualUses = spiritualUses || blankInputText
         this.propertyIds = propertyIds 
         Herb.allHerbs.push(this)
     }
@@ -170,45 +170,14 @@ class Herb {
         
         container.innerHTML = form
         const formFound = document.getElementById('editForm')
-        const checkbox = document.getElementsByClassName('checkbox')[0]
-        this.appendCheckboxes(checkbox)
+        Property.appendCheckboxes()
+        document.querySelectorAll('.cb').forEach( cb => {
+            this.propertyIds.includes(parseInt(cb.id)) ? cb.checked = true : cb.checked = false
+        })
         
         formFound.addEventListener('submit', e => this.submitEdit(e))
     }
 
-    // should this stay here or since it's duplicated in properties should i find a way to leave it there?
-    appendCheckboxes(checkbox){
-        Property.allProperties.forEach(p => {
-            const cb = document.createElement('input')
-            const label = document.createElement('label')
-            if (document.getElementById('editForm')){
-                this.propertyIds.includes(p.id) ? cb.checked = true : cb.checked = false
-                 // how to keep this locally here instead of global?
-                // const checkboxes = []
-                label.innerText = p.name
-                label.id = p.id
-                // want to add event listener to take us to property show page:
-                // label.addEventListener('click', e => this.fetchProperty(e))
-                cb.setAttribute('type', 'checkbox')
-                cb.id = p.id
-                cb.className = 'cb'
-                checkbox.appendChild(cb)
-                checkbox.appendChild(label)
-            } 
-            // else {
-            //     label.innerText = p.name
-            //     label.id = p.id
-            //     // // want to add event listener to take us to property show page:
-            //     // // label.addEventListener('click', e => this.fetchProperty(e))
-            //     cb.setAttribute('type', 'checkbox')
-            //     cb.id = p.id
-            //     cb.className = 'cb'
-            //     checkbox.appendChild(cb)
-            //     checkbox.appendChild(label)
-            // }
-             
-        })
-    }
 
     // aka appendCheckboxesToNewHerbForm? will it do anything else?
     // newHerbForm(){
@@ -274,24 +243,25 @@ class Herb {
     static postHerb(e){
         e.preventDefault()
 
-        const checkboxProperties = []
-        const checkbox = document.querySelectorAll('.cb')
         const common = document.getElementById('common').value
         const latin = document.getElementById('latin').value
         const properties = document.getElementById('properties').value.toLowerCase().split(', ')
         const medicinal = document.getElementById('medicinal').value
         const history = document.getElementById('history').value
         const spiritual = document.getElementById('spiritual').value
-        checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
+        const checkboxProperties = []
+        const checkbox = document.querySelectorAll('.cb')
+
+        checkbox.forEach(cb => {
+            if(properties.includes(cb.name)) {properties.splice(properties.indexOf(cb.name))}
+            if(cb.checked) {checkboxProperties.push(parseInt(cb.id))}
+        })
 
         let properties_attributes = {}
         for(let i=0; i < properties.length; i++){
-            // if current property name does not match the name of any properties in checkboxProperties...need to somehow get property name of checkbox properties, maybe can get through the html element id?? 
-            // if (!checkboxProperties.includes(properties[i])){
-                let o ={}
-                o[i] = {name: properties[i]}
-                properties_attributes = Object.assign(properties_attributes, o)
-            // }
+            let o ={}
+            o[i] = {name: properties[i]}
+            properties_attributes = Object.assign(properties_attributes, o)
         }
 
         const options = {
