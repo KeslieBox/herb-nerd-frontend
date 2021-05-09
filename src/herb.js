@@ -76,10 +76,14 @@ class Herb {
     }
 
     appendHerb(){
-        const ul = document.getElementById('herbs')
+        debugger
+        const ul = document.getElementById('herbs') || document.createElement('ul')
         const li = document.createElement('li')
+        ul.id = 'herbs'
         li.innerText = `${this.commonName} - ${this.latinName}`
         ul.append(li) 
+        console.log(ul)
+        debugger
         li.addEventListener('click', e => this.herbProfile(e))
     }
 
@@ -122,16 +126,16 @@ class Herb {
 
         // how to extract more of this into appendPropertyToProfile?
         this.properties.forEach(p => par.innerHTML += `${p.name}, `)
+        debugger
         properties.append(par)
 
-        // is this ridiculous to do this? could i turn these into an object or something instead?
         editBtn.addEventListener('click', (e) => this.editForm(e))
     }
 
-    newHerbForm(e){
+    static newHerbForm(e){
         e.preventDefault()
-        const herbForm = document.createElement('form')
-        herbForm.innerHTML = `
+        Herb.clearContainer()
+        const herbForm = `
         <form id="herbForm">
                 <h1>Create a New Herb Profile:</h1><br>
                 <label>Common Name</label><br>
@@ -151,18 +155,19 @@ class Herb {
                 <input type="submit" value="Create New Herb Profile">
             </form>`
 
-        container.innerHTML += herbForm
-
-        
+        container.innerHTML = herbForm
+        const formFound = document.getElementById('herbForm')
         this.appendCheckboxes()
 
-        herbForm.addEventListener('submit', e => {
+        formFound.addEventListener('submit', e => {
+            console.log(this)
             this.newHerbProperties(e)
             // this.postHerb(e)
         }) 
     }
 
     static appendCheckboxes(){
+        // why is checkbox empty?
         const checkbox = document.getElementsByClassName('checkbox')[0]
         // const cb = document.querySelectorAll('.cb')
         Property.allProperties.forEach(p => {
@@ -178,7 +183,6 @@ class Herb {
             cb.className = 'cb'
             checkbox.appendChild(cb)
             checkbox.appendChild(label)
-            // !this.allProperties.includes(p.id) ? this.allProperties.push(p.id) : p
         })
     }
 
@@ -265,7 +269,7 @@ class Herb {
         this.propertyIds = herbObj.propertyIds
     }
     
-    newHerbProperties(e){
+    static newHerbProperties(e){
         debugger
         e.preventDefault()
         const common = document.getElementById('common').value
@@ -289,7 +293,7 @@ class Herb {
             properties_attributes = Object.assign(properties_attributes, o)
         }
 
-        herbAttributes = {herb: {
+        const herbAttributes = {herb: {
             common_name: common,
             latin_name: latin,
             property_ids: checkboxProperties,
@@ -306,12 +310,12 @@ class Herb {
     static postHerb(e, herbAttributes){
         e.preventDefault()
         debugger
-        const common = document.getElementById('common').value
-        const latin = document.getElementById('latin').value
+        // const common = document.getElementById('common').value
+        // const latin = document.getElementById('latin').value
         // const properties = document.getElementById('properties').value.toLowerCase().split(', ')
-        const medicinal = document.getElementById('medicinal').value
-        const history = document.getElementById('history').value
-        const spiritual = document.getElementById('spiritual').value
+        // const medicinal = document.getElementById('medicinal').value
+        // const history = document.getElementById('history').value
+        // const spiritual = document.getElementById('spiritual').value
         // const checkboxProperties = []
         // const checkbox = document.querySelectorAll('.cb')
 
@@ -355,8 +359,10 @@ class Herb {
             // is there a way to clean this up??
             .then(herbObj => {
                 if(herbObj.commonName && herbObj.latinName && herbObj.properties){
+                    debugger
                     const herb = new Herb(herbObj)
                     herb.appendHerb()
+                    herb.herbProfile()
                     herbObj.properties.forEach(p => new Property(p)) 
                 } else if (herbObj.commonName && herbObj.latinName){
                     const herb = new Herb(herbObj)

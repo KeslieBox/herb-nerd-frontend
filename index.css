@@ -25,22 +25,23 @@
     text-align: center;
 }
 
-form {
-    border-color: black;
-    margin-left: 11%;
-    margin-right: 54%;
-    margin-top: 5%;
-    margin-bottom: 3%;
+form, #editForm {
     background-color: #fdf5e6cc;
-    padding-top: 16px;
-    padding-bottom: 12px;
-    padding-left: 49px;
-    padding-right: 52px;
+    margin-left: 439px;
+    margin-right: 435px;
+    /* margin-top: 56px; */
+    padding-left: 39px;
+    padding-right: 17px;
+    padding-top: 5px;
+    padding-bottom: 23px;
     border-top-style: solid;
     border-left-style: solid;
     border-bottom-style: solid;
     border-right: solid;
     border-width: 11px;
+    border-color: black;
+    font-family: monospace;
+    font-size: 17px;
 }
 
 label {
@@ -84,14 +85,21 @@ input, select, textarea {
     background-color: #fdf5e62e;
 }
 
+#editBtn {
+    margin-left: 259px;
+    margin-top: 24px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
 
 #encyclopedia {
     margin-left: 478px;
     margin-right: 486px;
     z-index: 100;
     background-color: #fdf5e6cc;
-    padding-top: 16px;
-    padding-bottom: 42px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     padding-left: 49px;
     padding-right: 52px;
     border-top-style: solid;
@@ -150,45 +158,10 @@ li {
     font-size: 17px;
 }
 
-#editBtn {
-    margin-left: 259px;
-    margin-top: 24px;
-    padding-left: 7px;
-    padding-right: 7px;
-}
-
-#editForm {
-    background-color: #fdf5e6cc;
-    margin-left: 439px;
-    margin-right: 435px;
-    margin-top: 56px;
-    padding-left: 39px;
-    padding-right: 17px;
-    padding-top: 18px;
-    padding-bottom: 23px;
-    border-top-style: solid;
-    border-left-style: solid;
-    border-bottom-style: solid;
-    border-right: solid;
-    border-width: 11px;
-    border-color: black;
-    font-family: monospace;
-    font-size: 17px;
-}
-
-/* .img {
- 
-  position: absolute;
-  margin-left: 544px;
-  width: 519px;
-  opacity: .5;
-  z-index: 1;
-  margin-top: 0px;
-} */
 
 body {
     background-image: url("https://images.pexels.com/photos/165228/pexels-photo-165228.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
-    background-position: center;
+    /* background-position: center; */
     background-repeat: no-repeat;
     background-size: 100%;
     opacity: 2;
