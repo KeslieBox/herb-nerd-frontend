@@ -8,8 +8,8 @@ const container = document.getElementById('herbsContainer')
 // const history = document.getElementById('history').value
 // const spiritual = document.getElementById('spiritual').value
 
-const formContent = `
-    <label>Common Name:</label>
+function formContent(){
+     return `<label>Common Name:</label>
     <input id='common' class="herbform" type="text" value="${this.commonName || ""}"><br>
     <label>Latin Name:</label>
     <input id='latin' class="herbform" type="text" value="${this.latinName || ""}"><br><br>
@@ -19,6 +19,7 @@ const formContent = `
     <textarea rows = "5" cols = "60" id='spiritual' class="textarea" type="text_area" form='herbForm'>${this.spiritualUses || ""}</textarea><br>
     <label>History:</label><br>
     <textarea rows = "5" cols = "60" id='history' class="textarea" type="text_area" form='herbForm'>${this.history || ""}</textarea><br>`
+}
 
 class Herb {
     static allHerbs = []
@@ -43,12 +44,9 @@ class Herb {
         fetch(herbsURL)
             .then(resp => resp.json())
             .then(herbs => {
-                // do i need to create new herb here for frontend?
                 if (herbs){
-                    // this.renderHerbs()
                     for(let herb of herbs){
                         const h = new Herb(herb)
-                        // h.appendHerb()
                     }
                     this.renderHerbs()
                 } else {
@@ -144,14 +142,14 @@ class Herb {
         const herbForm = `
         <form id="herbForm">
                 <h1>Create a New Herb Profile:</h1><br>
-                ${formContent} 
+                ${formContent.call({})}
 
                 <label>Medicinal Properties:</label><br>
                     <ul>
                         <li>You can use a combination of checkboxes & manual entry</li>
                         <li>Don't worry about entering something twice</li>
                     </ul>
-                <input id='properties' class="herbform" type="text" value="Use comma-separated-values, ie astringent, vulnerary"><br>
+                <input id='properties' class="herbform" type="text" placeholder="Use comma-separated-values, ie astringent, vulnerary"><br>
                 <span class='checkbox'></span>
                 <input type="submit" value="Create New Herb Profile">
             </form>`
@@ -162,10 +160,7 @@ class Herb {
         this.appendCheckboxes()
         const formFound = document.getElementById('herbForm')
         formFound.addEventListener('submit', e => {
-            debugger
-            if(propertiesInput === "Use comma-separated-values, ie astringent, vulnerary") {propertiesInput.innerText = ""}
             this.newHerbProperties(e)
-            // this.postHerb(e)
         }) 
     }
 
@@ -199,14 +194,14 @@ class Herb {
         const form = `
         <form id="editForm">
                 <h1>Edit Herb Profile:</h1><br>
-                ${formContent} 
+                ${formContent.call(this)} 
                 <label id='prop'>Medicinal Properties:</label>
                 <span class='checkbox'></span><br>
                 <input id='submitBtn' type="submit" value="Edit Herb Profile">
         </form> `
         
         Herb.clearContainer()
-        container.append(form)
+        container.innerHTML = form
         
         debugger
         const formFound = document.getElementById('editForm')
@@ -333,9 +328,10 @@ class Herb {
             // is there a way to clean this up??
             .then(herbObj => {
                 if(herbObj.commonName && herbObj.latinName && herbObj.properties){
-                    debugger
+                    
                     const herb = new Herb(herbObj)
                     herb.herbProfile()
+                    debugger
                     // do i need to check length on p.name to make sure it doesn't save empty strings?
                     herbObj.properties.forEach(p => {if (!Property.allProperties.includes(p) && p.name) {new Property(p)}}) 
                 // do i need to check length on common and latin names to make sure it doesn't save empty strings?
