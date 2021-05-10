@@ -12,7 +12,7 @@ function formContent(){
      return `<label>Common Name:</label>
     <input id='common' class="herbform" type="text" value="${this.commonName || ""}"><br>
     <label>Latin Name:</label>
-    <input id='latin' class="herbform" type="text" value="${this.latinName || ""}"><br><br>
+    <input id='latin' class="herbform" type="text" value="${this.latinName || ""}"><br>
     <label>Medicinal Uses:</label><br>
     <textarea rows = "5" cols = "60" id='medicinal' class="textarea" type="text_area" form='herbForm'>${this.medicinalUses || ""}</textarea><br>
     <label>Spiritual Uses:</label><br>
@@ -57,6 +57,7 @@ class Herb {
 
     static clearContainer(){
         container.innerHTML = ""
+        return container
     }
 
     static renderHerbs(){
@@ -137,7 +138,6 @@ class Herb {
 
     static newHerbForm(e){
         e.preventDefault()
-        Herb.clearContainer()
         
         const herbForm = `
         <form id="herbForm">
@@ -154,9 +154,7 @@ class Herb {
                 <input type="submit" value="Create New Herb Profile">
             </form>`
 
-        container.innerHTML = herbForm
-        const propertiesInput = document.getElementById('properties')
-        propertiesInput.addEventListener('click', e => e.target.value = "")
+        Herb.clearContainer().innerHTML = herbForm
         this.appendCheckboxes()
         const formFound = document.getElementById('herbForm')
         formFound.addEventListener('submit', e => {
@@ -166,6 +164,7 @@ class Herb {
 
     static appendCheckboxes(){
         const checkbox = document.getElementsByClassName('checkbox')[0]
+        // alphabetize properties...try to abstract this out with the other alphabetize function for encycplopedia index
         Property.allProperties.sort((a, b) => {
             if (a.name < b.name) {return -1}
             if (a.name > b.name) {return 1}
@@ -189,8 +188,6 @@ class Herb {
 
     editForm(e){
         e.preventDefault()
-        // where should this form live?:
-        debugger
         const form = `
         <form id="editForm">
                 <h1>Edit Herb Profile:</h1><br>
@@ -200,10 +197,8 @@ class Herb {
                 <input id='submitBtn' type="submit" value="Edit Herb Profile">
         </form> `
         
-        Herb.clearContainer()
-        container.innerHTML = form
+        Herb.clearContainer().innerHTML = form
         
-        debugger
         const formFound = document.getElementById('editForm')
         const checkboxProperties = []
         const checkbox = document.querySelectorAll('.cb')
@@ -213,16 +208,16 @@ class Herb {
         const history = document.getElementById('history').value
         const spiritual = document.getElementById('spiritual').value
 
-        checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
+        // checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
 
-        const herbAttributes = {herb: {
-            common_name: common,
-            latin_name: latin,
-            property_ids: checkboxProperties,
-            medicinal_uses: medicinal,
-            history: history,
-            spiritual_uses: spiritual
-        }}
+        // const herbAttributes = {herb: {
+        //     common_name: common,
+        //     latin_name: latin,
+        //     property_ids: checkboxProperties,
+        //     medicinal_uses: medicinal,
+        //     history: history,
+        //     spiritual_uses: spiritual
+        // }}
 
         // is it ok to use Herb here instead of this?
         Herb.appendCheckboxes()
@@ -230,47 +225,60 @@ class Herb {
             this.propertyIds.includes(parseInt(cb.id)) ? cb.checked = true : cb.checked = false
         })
         
-        formFound.addEventListener('submit', e => this.submitEdit(e, herbAttributes))
+        formFound.addEventListener('submit', e => this.submitEdit(e))
     }
 
-    submitEdit(e, herbAttributes){
+    submitEdit(e){
         e.preventDefault()
-        // const checkboxProperties = []
-        // const checkbox = document.querySelectorAll('.cb')
-        // const common = document.getElementById('common').value
-        // const latin = document.getElementById('latin').value
-        // const medicinal = document.getElementById('medicinal').value
-        // const history = document.getElementById('history').value
-        // const spiritual = document.getElementById('spiritual').value
+        debugger
+        const checkboxProperties = []
+        const checkbox = document.querySelectorAll('.cb')
+        const common = document.getElementById('common').value
+        const latin = document.getElementById('latin').value
+        const medicinal = document.getElementById('medicinal').value
+        const history = document.getElementById('history').value
+        const spiritual = document.getElementById('spiritual').value
 
-        // checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
-
-        // create single source for the body here and for posting a new herb
+        checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
+        debugger
+        // create single source for the body for edit and for posting a new herb
         const options = {
             method: 'PATCH',
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            body: JSON.stringify({herbAttributes})
+            body: JSON.stringify({
+                herb: {
+                common_name: common,
+                latin_name: latin,
+                property_ids: checkboxProperties,
+                medicinal_uses: medicinal,
+                history: history,
+                spiritual_uses: spiritual
+                }
+            })
         }
 
         fetch(`http://localhost:3000/herbs/${this.id}`, options)
         .then(resp => resp.json())
         .then(herbObj => {
             const herb = Herb.allHerbs.find(h => h.id === herbObj.id)
+            debugger
             herb.updateAttributes(herbObj)
             herb.herbProfile(e)
         })
     }
 
     updateAttributes(herbObj){
+        debugger
         this.commonName = herbObj.commonName
         this.latinName = herbObj.latinName
         this.spiritualUses = herbObj.spiritualUses
         this.history = herbObj.history
         this.medicinalUses = herbObj.medicinalUses
-        this.propertyIds = herbObj.propertyIds
+        this.propertyIds = herbObj.propertyIds || ""
+        debugger
     }
     
     static newHerbProperties(e){
@@ -327,19 +335,19 @@ class Herb {
             .then(resp => resp.json())
             // is there a way to clean this up??
             .then(herbObj => {
-                if(herbObj.commonName && herbObj.latinName && herbObj.properties){
-                    
+                if(herbObj.commonName && herbObj.latinName){ 
                     const herb = new Herb(herbObj)
                     herb.herbProfile()
-                    debugger
                     // do i need to check length on p.name to make sure it doesn't save empty strings?
-                    herbObj.properties.forEach(p => {if (!Property.allProperties.includes(p) && p.name) {new Property(p)}}) 
-                // do i need to check length on common and latin names to make sure it doesn't save empty strings?
-                } else if (herbObj.commonName && herbObj.latinName){
-                    const herb = new Herb(herbObj)
-                    herb.herbProfile()
-                } else if (herbObj.properties){
-                    herbObj.properties.forEach(p => new Property(p)) 
+                    if (herb.properties){
+                        herbObj.properties.forEach(p => {if (!Property.allProperties.includes(p) && p.name) {new Property(p)}}) 
+                    }
+                    // do i need to check length on common and latin names to make sure it doesn't save empty strings?
+                // } else if (herbObj.commonName && herbObj.latinName){
+                //     const herb = new Herb(herbObj)
+                //     herb.herbProfile()
+                // } else if (herbObj.properties){
+                //     herbObj.properties.forEach(p => new Property(p)) 
                 } else {
                     throw new Error(herbObj.message)
                 }
