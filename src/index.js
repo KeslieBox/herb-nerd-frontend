@@ -13,6 +13,6 @@ encycNav.addEventListener('click', e => {
     Herb.renderHerbs(Herb.allHerbs)
 })
 
-// newHerbNav.addEventListener('click', e => {
-//     // call newHerbForm 
-// })
+newHerbNav.addEventListener('click', e => {
+    Herb.newHerbForm(e) 
+})

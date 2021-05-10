@@ -1,5 +1,19 @@
 const herbsURL = 'http://localhost:3000/herbs'
 const container = document.getElementById('herbsContainer')
+// const checkboxProperties = []
+// const checkbox = document.querySelectorAll('.cb')
+// const common = document.getElementById('common').value
+// const latin = document.getElementById('latin').value
+// const medicinal = document.getElementById('medicinal').value
+// const history = document.getElementById('history').value
+// const spiritual = document.getElementById('spiritual').value
+
+function alphabetize(){
+    if (a.name < b.name) {return -1}
+    if (a.name > b.name) {return 1}
+    return 0
+}
+
 class Herb {
     static allHerbs = []
 
@@ -44,43 +58,37 @@ class Herb {
     static renderHerbs(){
         const div = document.createElement('div')
         const ul = document.createElement('ul')
-        const herbForm = document.getElementById('herbForm')
-
         ul.id = 'herbs'
         div.innerHTML = '<h1>Encyclopedia of Herbs</h1>'
         div.id = 'encyclopedia'
         container.append(div)
         div.append(ul)
-        // debugger
-        // function for new herb form
-        // const herbForm = document.createElement('form')
-        herbForm.addEventListener('submit', e => this.postHerb(e))
 
-        // for(let herb of herbs){
-        //     console.log(herb)
-        //     debugger
-        //     // herb.appendHerb()
-        // }   
-        
-        for(let herb of Herb.allHerbs){
-            console.log(herb)
-            herb.appendHerb()
-        } 
-        // Herb.allHerbs.forEach(herb => herb.appendHerb()) 
+        // how to get this to work w/ appendHerb() which needs instance of herb class
+        // const mapped = this.allHerbs.map(h => h.commonName).sort()
+      
+        // clean this up/ make dynamic
+        // this.allHerbs.sort(alphabetize(commonName))???
+        this.allHerbs.sort((a, b) => {
+            if (a.commonName < b.commonName) {return -1}
+            if (a.commonName > b.commonName) {return 1}
+            return 0
+        })
+        for(let herb of this.allHerbs){ herb.appendHerb()} 
        
     }
 
     appendHerb(){
-        // debugger
-        const ul = document.getElementById('herbs')
+        const ul = document.getElementById('herbs') || document.createElement('ul')
         const li = document.createElement('li')
+        ul.id = 'herbs'
         li.innerText = `${this.commonName} - ${this.latinName}`
         ul.append(li) 
         li.addEventListener('click', e => this.herbProfile(e))
     }
 
     herbProfile(e){
-        e.preventDefault()
+        if(e) {e.preventDefault()}
         const par = document.createElement('p')
         // should i just hardcode this in index.html?:
         container.innerHTML = `
@@ -120,31 +128,68 @@ class Herb {
         this.properties.forEach(p => par.innerHTML += `${p.name}, `)
         properties.append(par)
 
-        // is this ridiculous to do this? could i turn these into an object or something instead?
         editBtn.addEventListener('click', (e) => this.editForm(e))
     }
 
-    newHerbForm(e){
+    static newHerbForm(e){
         e.preventDefault()
-        const form = `
+        Herb.clearContainer()
+        const herbForm = `
         <form id="herbForm">
                 <h1>Create a New Herb Profile:</h1><br>
                 <label>Common Name</label><br>
                 <input id='common' class="herbform" type="text"><br>
                 <label>Latin Name</label><br>
                 <input id='latin' class="herbform" type="text"><br>
-                <label>Medicinal Uses</label><br>
-                <input id='medicinal' class="herbform" type="text"><br>
-                <label>Spiritual Uses</label><br>
-                <input id='spiritual' class="herbform" type="text"><br>
-                <label>History</label><br>
-                <input id='history' class="herbform" type="text"><br>
-                <label>Medicinal Properties</label>
-                <span>Use comma-separated-values, ie astringent, vulnerary</span><br>
+                <label>Medicinal Uses:</label><br>
+                <textarea rows = "5" cols = "60" id='medicinal' class="textarea" type="text_area" form='herbForm'>${this.medicinalUses || ""}</textarea><br>
+                <label>Spiritual Uses:</label><br>
+                <textarea rows = "5" cols = "60" id='spiritual' class="textarea" type="text_area" form='herbForm'>${this.spiritualUses || ""}</textarea><br>
+                <label>History:</label><br>
+                <textarea rows = "5" cols = "60" id='history' class="textarea" type="text_area" form='herbForm'>${this.history || ""}</textarea><br>
+                <label>Medicinal Properties:</label><br>
+                    <ul>
+                        <li>You can use a combination of checkboxes & manual entry</li>
+                        <li>Use comma-separated-values, ie astringent, vulnerary</li>
+                        <li>Don't worry about entering something twice</li>
+                    </ul>
                 <input id='properties' class="herbform" type="text"><br>
                 <span class='checkbox'></span>
                 <input type="submit" value="Create New Herb Profile">
             </form>`
+
+        container.innerHTML = herbForm
+        const formFound = document.getElementById('herbForm')
+        this.appendCheckboxes()
+
+        formFound.addEventListener('submit', e => {
+            console.log(this)
+            this.newHerbProperties(e)
+            // this.postHerb(e)
+        }) 
+    }
+
+    static appendCheckboxes(){
+        const checkbox = document.getElementsByClassName('checkbox')[0]
+        Property.allProperties.sort((a, b) => {
+            if (a.name < b.name) {return -1}
+            if (a.name > b.name) {return 1}
+            return 0
+        })
+        Property.allProperties.forEach(p => {
+            const cb = document.createElement('input')
+            const label = document.createElement('label')
+            label.innerText = p.name
+            label.id = p.id
+            // want to add event listener to take us to property show page w/ definition:
+            // label.addEventListener('click', e => this.fetchProperty(e))
+            cb.setAttribute('type', 'checkbox')
+            cb.id = p.id
+            cb.name = p.name
+            cb.className = 'cb'
+            checkbox.appendChild(cb)
+            checkbox.appendChild(label)
+        })
     }
 
     editForm(e){
@@ -170,24 +215,14 @@ class Herb {
         
         container.innerHTML = form
         const formFound = document.getElementById('editForm')
-        Property.appendCheckboxes()
+        // is it ok to use Herb here instead of this?
+        Herb.appendCheckboxes()
         document.querySelectorAll('.cb').forEach( cb => {
             this.propertyIds.includes(parseInt(cb.id)) ? cb.checked = true : cb.checked = false
         })
         
         formFound.addEventListener('submit', e => this.submitEdit(e))
     }
-
-
-    // aka appendCheckboxesToNewHerbForm? will it do anything else?
-    // newHerbForm(){
-
-    //     const checkbox = document.getElementsByClassName('checkbox')[0]
-    //     // const checkboxProperties = []
-    //     const cb = document.querySelectorAll('.cb')
-    //     this.appendCheckboxes(checkbox)
-    //     // cb.forEach(cb => !checkboxProperties.includes(parseInt(cb.id)) ? checkboxProperties.push(parseInt(cb.id)) : cb)
-    // }
 
     submitEdit(e){
         e.preventDefault()
@@ -240,9 +275,8 @@ class Herb {
         this.propertyIds = herbObj.propertyIds
     }
     
-    static postHerb(e){
+    static newHerbProperties(e){
         e.preventDefault()
-
         const common = document.getElementById('common').value
         const latin = document.getElementById('latin').value
         const properties = document.getElementById('properties').value.toLowerCase().split(', ')
@@ -259,41 +293,83 @@ class Herb {
 
         let properties_attributes = {}
         for(let i=0; i < properties.length; i++){
-            let o ={}
+            let o = {}
             o[i] = {name: properties[i]}
             properties_attributes = Object.assign(properties_attributes, o)
         }
 
+        const herbAttributes = {herb: {
+            common_name: common,
+            latin_name: latin,
+            property_ids: checkboxProperties,
+            properties_attributes: properties_attributes,
+            medicinal_uses: medicinal,
+            history: history,
+            spiritual_uses: spiritual
+        }}
+
+        this.postHerb(e, herbAttributes)
+    }
+
+    static postHerb(e, herbAttributes){
+        e.preventDefault()
+        // const common = document.getElementById('common').value
+        // const latin = document.getElementById('latin').value
+        // const properties = document.getElementById('properties').value.toLowerCase().split(', ')
+        // const medicinal = document.getElementById('medicinal').value
+        // const history = document.getElementById('history').value
+        // const spiritual = document.getElementById('spiritual').value
+        // const checkboxProperties = []
+        // const checkbox = document.querySelectorAll('.cb')
+
+        // checkbox.forEach(cb => {
+        //     if(properties.includes(cb.name)) {properties.splice(properties.indexOf(cb.name))}
+        //     if(cb.checked) {checkboxProperties.push(parseInt(cb.id))}
+        // })
+
+        // let properties_attributes = {}
+        // for(let i=0; i < properties.length; i++){
+        //     let o ={}
+        //     o[i] = {name: properties[i]}
+        //     properties_attributes = Object.assign(properties_attributes, o)
+        // }
+        
         const options = {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            body: JSON.stringify({
-                herb: {
-                    common_name: common,
-                    latin_name: latin,
-                    property_ids: checkboxProperties,
-                    properties_attributes: properties_attributes,
-                    medicinal_uses: medicinal,
-                    history: history,
-                    spiritual_uses: spiritual
-                }
-            })
+            // body: JSON.stringify({
+            //     herb: {
+            //         common_name: common,
+            //         latin_name: latin,
+            //         property_ids: checkboxProperties,
+            //         properties_attributes: properties_attributes,
+            //         medicinal_uses: medicinal,
+            //         history: history,
+            //         spiritual_uses: spiritual
+            //     }
+            // })
+            body: JSON.stringify(herbAttributes)
         }
 
        e.target.reset()
+
         fetch(herbsURL, options)
             .then(resp => resp.json())
+            // is there a way to clean this up??
             .then(herbObj => {
                 if(herbObj.commonName && herbObj.latinName && herbObj.properties){
+                    debugger
                     const herb = new Herb(herbObj)
-                    herb.appendHerb()
-                    herbObj.properties.forEach(p => new Property(p)) 
+                    herb.herbProfile()
+                    // do i need to check length on p.name to make sure it doesn't save empty strings?
+                    herbObj.properties.forEach(p => {if (!Property.allProperties.includes(p) && p.name) {new Property(p)}}) 
+                // do i need to check length on common and latin names to make sure it doesn't save empty strings?
                 } else if (herbObj.commonName && herbObj.latinName){
                     const herb = new Herb(herbObj)
-                    herb.appendHerb()
+                    herb.herbProfile()
                 } else if (herbObj.properties){
                     herbObj.properties.forEach(p => new Property(p)) 
                 } else {
