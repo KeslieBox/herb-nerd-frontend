@@ -10,7 +10,8 @@
     font-size: 25px;
     margin-left: 22px;
     background-color: black;
-    color: oldlace
+    color: oldlace;
+    cursor: pointer;
 }
 
 .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {

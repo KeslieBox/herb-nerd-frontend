@@ -1,5 +1,12 @@
 const herbsURL = 'http://localhost:3000/herbs'
 const container = document.getElementById('herbsContainer')
+// const checkboxProperties = []
+// const checkbox = document.querySelectorAll('.cb')
+// const common = document.getElementById('common').value
+// const latin = document.getElementById('latin').value
+// const medicinal = document.getElementById('medicinal').value
+// const history = document.getElementById('history').value
+// const spiritual = document.getElementById('spiritual').value
 
 function formContent(){
      return `<label>Common Name:</label>
@@ -12,6 +19,13 @@ function formContent(){
     <textarea rows = "5" cols = "60" id='spiritual' class="textarea" type="text_area" form='herbForm'>${this.spiritualUses || ""}</textarea><br>
     <label>History:</label><br>
     <textarea rows = "5" cols = "60" id='history' class="textarea" type="text_area" form='herbForm'>${this.history || ""}</textarea><br>`
+}
+
+// can i abstract this somehow??
+function alphabetize(){
+    if (a.name < b.name) {return -1}
+    if (a.name > b.name) {return 1}
+    return 0
 }
 
 class Herb {
@@ -27,6 +41,7 @@ class Herb {
         this.spiritualUses = spiritualUses || blankInputText
         this.propertyIds = propertyIds 
         Herb.allHerbs.push(this)
+        
     }
 
     get properties(){
@@ -62,6 +77,11 @@ class Herb {
         container.append(div)
         div.append(ul)
 
+        // how to get this to work w/ appendHerb() which needs instance of herb class
+        // const mapped = this.allHerbs.map(h => h.commonName).sort()
+      
+        // clean this up/ make dynamic
+        // this.allHerbs.sort(alphabetize(commonName))???
         this.allHerbs.sort((a, b) => {
             if (a.commonName < b.commonName) {return -1}
             if (a.commonName > b.commonName) {return 1}
@@ -122,19 +142,7 @@ class Herb {
         Herb.clearContainer().innerHTML = herbForm
         this.appendCheckboxes()
         const formFound = document.getElementById('herbForm')
-        const common = document.getElementById('common')
-        const latin = document.getElementById('latin')
-        formFound.addEventListener('submit', e => {
-            e.preventDefault()
-            // how to do this better??
-            if(this.commonName && this.latinName) {
-                this.newHerbAttributes(e)
-            } else if (!this.commonName) {
-                common.placeholder = "This field can't be blank"
-            } else if (!this.latinName) {
-                latin.placeholder = "This field can't be blank"
-            }
-        }) 
+        formFound.addEventListener('submit', e => {this.newHerbAttributes(e)}) 
     }
 
     static appendCheckboxes(){
@@ -150,6 +158,8 @@ class Herb {
             const label = document.createElement('label')
             label.innerText = p.name
             label.id = p.id
+            // want to add event listener to take us to property show page w/ definition:
+            // label.addEventListener('click', e => this.fetchProperty(e))
             cb.setAttribute('type', 'checkbox')
             cb.id = p.id
             cb.name = p.name
@@ -173,7 +183,26 @@ class Herb {
         Herb.clearContainer().innerHTML = form
         
         const formFound = document.getElementById('editForm')
-       
+        const checkboxProperties = []
+        const checkbox = document.querySelectorAll('.cb')
+        const common = document.getElementById('common').value
+        const latin = document.getElementById('latin').value
+        const medicinal = document.getElementById('medicinal').value
+        const history = document.getElementById('history').value
+        const spiritual = document.getElementById('spiritual').value
+
+        // checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
+
+        // const herbAttributes = {herb: {
+        //     common_name: common,
+        //     latin_name: latin,
+        //     property_ids: checkboxProperties,
+        //     medicinal_uses: medicinal,
+        //     history: history,
+        //     spiritual_uses: spiritual
+        // }}
+
+        // is it ok to use Herb here instead of this?
         Herb.appendCheckboxes()
         document.querySelectorAll('.cb').forEach( cb => {
             this.propertyIds.includes(parseInt(cb.id)) ? cb.checked = true : cb.checked = false
@@ -184,7 +213,7 @@ class Herb {
 
     submitEdit(e){
         e.preventDefault()
-        debugger
+    
         const checkboxProperties = []
         const checkbox = document.querySelectorAll('.cb')
         const common = document.getElementById('common').value
@@ -192,9 +221,19 @@ class Herb {
         const medicinal = document.getElementById('medicinal').value
         const history = document.getElementById('history').value
         const spiritual = document.getElementById('spiritual').value
+        // for trying out adding new properties here, also need to change the form to have this input
+        // const properties = document.getElementById('properties').value.toLowerCase().split(', ')
 
         checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
-
+        debugger
+        // create single source for the body for edit and for posting a new herb
+        // experiment with adding new properties here, need to add properties_attributes to request body
+        // let properties_attributes = {}
+        // for(let i=0; i < properties.length; i++){
+        //     let o = {}
+        //     o[i] = {name: properties[i]}
+        //     properties_attributes = Object.assign(properties_attributes, o)
+        // }
         const options = {
             method: 'PATCH',
             headers: {
@@ -217,7 +256,10 @@ class Herb {
         .then(resp => resp.json())
         .then(herbObj => {
             const herb = Herb.allHerbs.find(h => h.id === herbObj.id)
-
+            // can i make a post request from inside of here to make new properties while in edit form? and then update edit and new forms to be even more the same??
+            // if (herb.properties){
+            //     herbObj.properties.forEach(p => {if (!Property.allProperties.includes(p) && p.name) {new Property(p)}}) 
+            // }
             herb.updateAttributes(herbObj)
             herb.herbProfile(e)
         })
@@ -288,10 +330,19 @@ class Herb {
             .then(herbObj => {
                 if(herbObj.commonName && herbObj.latinName){ 
                     const herb = new Herb(herbObj)
-                    herb.herbProfile()
                     if (herb.properties){
-                        herbObj.properties.forEach(p => {if (!Property.allProperties.includes(p) && p.name.lenth > 4) {new Property(p)}}) 
-                    }
+                        herbObj.properties.forEach(p => {
+                            let propNames = Property.allProperties.map(prop => prop.name)
+                            if (!propNames.includes(p.name)) {new Property(p)}       
+                        }) 
+                    } 
+                    herb.herbProfile()
+                    // do i need to check length on common and latin names to make sure it doesn't save empty strings?
+                // } else if (herbObj.commonName && herbObj.latinName){
+                //     const herb = new Herb(herbObj)
+                //     herb.herbProfile()
+                // } else if (herbObj.properties){
+                //     herbObj.properties.forEach(p => new Property(p)) 
                 } else {
                     throw new Error(herbObj.message)
                 }
