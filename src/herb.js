@@ -1,5 +1,6 @@
 const herbsURL = 'http://localhost:3000/herbs'
 const container = document.getElementById('herbsContainer')
+// const propNames = Property.allProperties.map(p => p.name)
 // const checkboxProperties = []
 // const checkbox = document.querySelectorAll('.cb')
 // const common = document.getElementById('common').value
@@ -40,8 +41,7 @@ class Herb {
         this.history = history || blankInputText
         this.spiritualUses = spiritualUses || blankInputText
         this.propertyIds = propertyIds 
-        Herb.allHerbs.push(this)
-        
+        Herb.allHerbs.push(this)   
     }
 
     get properties(){
@@ -225,7 +225,6 @@ class Herb {
         // const properties = document.getElementById('properties').value.toLowerCase().split(', ')
 
         checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
-        debugger
         // create single source for the body for edit and for posting a new herb
         // experiment with adding new properties here, need to add properties_attributes to request body
         // let properties_attributes = {}
@@ -326,23 +325,16 @@ class Herb {
 
         fetch(herbsURL, options)
             .then(resp => resp.json())
-            // is there a way to clean this up??
             .then(herbObj => {
-                if(herbObj.commonName && herbObj.latinName){ 
-                    const herb = new Herb(herbObj)
-                    if (herb.properties){
-                        herbObj.properties.forEach(p => {
-                            let propNames = Property.allProperties.map(prop => prop.name)
-                            if (!propNames.includes(p.name)) {new Property(p)}       
-                        }) 
+                let herbNames = Herb.allHerbs.map(h => h.commonName)
+                let propNames = Property.allProperties.map(p => p.name)
+                let herb = Herb.allHerbs.find(herb => herb.commonName === herbObj.commonName) || ""
+                if(herbObj.commonName && herbObj.latinName){                 
+                    if (!herbNames.includes(herbObj.commonName)) { herb = new Herb(herbObj)}
+                    if (herbObj.properties){
+                        herbObj.properties.forEach(p => {if(!propNames.includes(p.name)) {new Property(p)}}) 
                     } 
                     herb.herbProfile()
-                    // do i need to check length on common and latin names to make sure it doesn't save empty strings?
-                // } else if (herbObj.commonName && herbObj.latinName){
-                //     const herb = new Herb(herbObj)
-                //     herb.herbProfile()
-                // } else if (herbObj.properties){
-                //     herbObj.properties.forEach(p => new Property(p)) 
                 } else {
                     throw new Error(herbObj.message)
                 }
