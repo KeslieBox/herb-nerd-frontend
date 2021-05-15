@@ -1,6 +1,6 @@
 const herbsURL = 'http://localhost:3000/herbs'
 const container = document.getElementById('herbsContainer')
-// const propNames = Property.allProperties.map(p => p.name)
+const propNames = Property.allProperties.map(p => p.name)
 // const checkboxProperties = []
 // const checkbox = document.querySelectorAll('.cb')
 // const common = document.getElementById('common').value
@@ -115,6 +115,7 @@ class Herb {
             </div>
         `
         const properties = document.getElementById('properties')
+        console.log(this.properties)
         this.properties.forEach(p => par.innerHTML += `${p.name}, `)
         properties.append(par)
 
@@ -135,7 +136,7 @@ class Herb {
                         <li>Don't worry about entering something twice</li>
                     </ul>
                 <input id='properties' class="herbform" type="text" placeholder="Use comma-separated-values, ie astringent, vulnerary"><br>
-                <span class='checkbox'></span>
+                <div class='checkbox'></div>
                 <input type="submit" value="Create New Herb Profile">
             </form>`
 
@@ -147,27 +148,144 @@ class Herb {
 
     static appendCheckboxes(){
         const checkbox = document.getElementsByClassName('checkbox')[0]
+        // const table = document.createElement('table')
+        // const row = document.createElement('tr')
+      
+        
+        // checkbox.appendChild(table)
+        // table.appendChild(row)
+       
         // alphabetize properties...try to abstract this out with the other alphabetize function for encycplopedia index
         Property.allProperties.sort((a, b) => {
             if (a.name < b.name) {return -1}
             if (a.name > b.name) {return 1}
             return 0
         })
-        Property.allProperties.forEach(p => {
-            const cb = document.createElement('input')
-            const label = document.createElement('label')
-            label.innerText = p.name
-            label.id = p.id
-            // want to add event listener to take us to property show page w/ definition:
-            // label.addEventListener('click', e => this.fetchProperty(e))
-            cb.setAttribute('type', 'checkbox')
-            cb.id = p.id
-            cb.name = p.name
-            cb.className = 'cb'
-            checkbox.appendChild(cb)
-            checkbox.appendChild(label)
-        })
+
+
+        let table = document.createElement('table'), tr, td, cell
+        table.id = 'table'
+        table.setAttribute('width', '100%')
+        
+        let i = 0
+        // while( i <= Property.allProperties.length){
+        for(let i = 0; i < Property.allProperties.length; i++){
+            if(i%4 === 0){
+                tr = document.createElement('tr')
+                tr.className = 'tr'
+                table.appendChild(tr)
+            }
+                td = document.createElement('td')
+                td.innerHTML = Property.allProperties[i].name
+                td.className = 'td'
+                tr.appendChild(td)
+        //     const cb = document.createElement('input')
+        //     const label = document.createElement('label')
+            // how to fill in the rest of the table row? 
+
+            //  for(let r of table.rows){
+            //     for(let i = 0; i )
+            //     td = document.createElement('td')
+            //     td.innerHTML = Property.allProperties[i].name
+            //     td.className = 'td'
+            //     r.appendChild(td)
+            //  }
+            // td.id = `td-${p.id}`
+
+            // for (cell = 0; cell < 6; cell++){
+            //         td = document.createElement('td')
+            //         td.innerHTML = Property.allProperties[cell].name
+            //         tr.appendChild(td)
+            //     }
+
+            
+        //     // want to add event listener to take us to property show page w/ definition:
+        //     // label.addEventListener('click', e => this.fetchProperty(e))
+        //     cb.setAttribute('type', 'checkbox')
+        //     cb.id = p.id
+        //     cb.name = p.name
+        //     cb.className = 'cb'
+        //     cb.label = p.name
+        //     cb.text = cb.name
+        //     label.htmlFor = cb.id
+
+        //     label.appendChild(document.createTextNode(cb.name))
+            // table.appendChild(td)
+            // table.appendChild(tr)
+        //     table.appendChild(cb)
+        //     table.appendChild(label)
+
+            // i+=4
+        }
+        checkbox.appendChild(table)
     }
+
+    // static appendCheckboxes(){
+    //     const checkbox = document.getElementsByClassName('checkbox')[0]
+    //     const table = document.createElement('table')
+    //     table.id = 'propertiesTable'
+    //     // const headerRow = document.createElement('tr')
+    //     // const bodyRow = document.createElement('tr')
+    //     // const th = `
+    //     //     <th id='h1'>h1</th>
+    //     //     <th id='h2'>h2</th>
+    //     //     <th id='h3'>h3</th>
+    //     //     <th id='h4'>h4</th>
+    //     // `
+    //     // const th2 = document.createElement('th')
+    //     // table.createTBody
+      
+    //     checkbox.appendChild(table)    //     // table.appendChild(headerRow)
+    //     // table.appendChild(bodyRow)
+    //     // headerRow.innerHTML = th
+    //     // alphabetize properties...try to abstract this out with the other alphabetize function for encycplopedia index
+    //     Property.allProperties.sort((a, b) => {
+    //         if (a.name < b.name) {return -1}
+    //         if (a.name > b.name) {return 1}
+    //         return 0
+    //     })
+
+    //     // after every 5 properties, make a new row of 5 below
+    //     Property.allProperties.forEach(p => {
+    //         const cb = document.createElement('input')
+    //         const label = document.createElement('label')
+    //         const td = document.createElement('td')
+    //         td.id = `td-${p.id}`
+
+    //         // code without table
+    //         // checkbox.appendChild(cb)
+    //         // checkbox.appendChild(label)
+    //         // label.innerText = p.name
+    //         // label.id = p.id
+
+    //         const rows = []
+    //         const range = (start, end, length = end - start + 1) =>
+    //         Array.from({ length }, (_, i) => start + i)
+            
+    //         let i = 0
+    //         while( i <= propNames.length){
+                
+    //             rows.push(range(propNames[i, i+5]))
+                 
+    //         i+=6
+    //         }     
+   
+    //         // want to add event listener to take us to property show page w/ definition:
+    //         // label.addEventListener('click', e => this.fetchProperty(e))
+    //         cb.setAttribute('type', 'checkbox')
+    //         cb.id = p.id
+    //         cb.name = p.name
+    //         cb.className = 'cb'
+    //         cb.label = p.name
+    //         cb.text = cb.name
+    //         label.htmlFor = cb.id
+
+    //         label.appendChild(document.createTextNode(cb.name))
+    //         table.appendChild(td)
+    //         table.appendChild(cb)
+    //         table.appendChild(label)
+    //     })
+    // }
 
     editForm(e){
         e.preventDefault()
@@ -328,11 +446,14 @@ class Herb {
             .then(herbObj => {
                 let herbNames = Herb.allHerbs.map(h => h.commonName)
                 let propNames = Property.allProperties.map(p => p.name)
-                let herb = Herb.allHerbs.find(herb => herb.commonName === herbObj.commonName) || ""
-                if(herbObj.commonName && herbObj.latinName){                 
+                let herb = Herb.allHerbs.find(herb => herb.commonName === herbObj.commonName) 
+                if(herbObj.commonName && herbObj.latinName){  
                     if (!herbNames.includes(herbObj.commonName)) { herb = new Herb(herbObj)}
                     if (herbObj.properties){
-                        herbObj.properties.forEach(p => {if(!propNames.includes(p.name)) {new Property(p)}}) 
+                        herbObj.properties.forEach(p => {
+                            if(!propNames.includes(p.name)) {new Property(p)} 
+                            if(!herb.propertyIds.includes(p.id)) {herb.propertyIds.push(p.id)}
+                        }) 
                     } 
                     herb.herbProfile()
                 } else {
