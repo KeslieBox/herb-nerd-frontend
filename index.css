@@ -25,9 +25,9 @@ form, #editForm {
     background-color: #fdf5e6cc;
     margin-left: 439px;
     min-width: 30%;
-    max-width: 47%;
+    max-width: 66%;
     padding-left: 39px;
-    padding-right: 17px;
+    padding-right: 40px;
     padding-top: 5px;
     padding-bottom: 23px;
     border: solid;
@@ -59,47 +59,46 @@ label {
     font-weight: 700;
     font-family: monospace;
     font-size: 18px;
+    white-space: nowrap;
 }
 
 td, th {
     padding: 3px;
     padding-right: 14px;
-    padding-left: 0px;
-    padding-top: 10px;
-    text-align: justify;
+    padding-top: 4px;
     font-size: 14px;
 }
 
 .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox] {
-    margin-left: -282px;
+    margin-left: -65px;
+    margin-right: -36px;
     margin-top: 6px;
+    position: relative;
 }
 
 .checkbox label, .radio label {
     margin-bottom: 0;
     cursor: pointer;
-    font-size: 18px;
-    margin-right: 19px;
-    padding-left: 5px;
-    margin-top: -35px;
-    margin-left: -10px;
+    /* font-size: 18px; */
+    margin-right: -81px;
+    /* padding-left: 7px; */
+    /* margin-top: -32px; */
+    /* margin-left: -34px; */
     font-family: 'Satisfy';
-    line-height: 1;
+    line-height: 0;
     letter-spacing: -1px;
+    /* position: relative; */
+    /* vertical-align: bottom; */
+    /* overflow: hidden; */
+    /* text-indent: 71px; */
+    display: block;
 }
-/* 
-input, select, textarea {
-    font-size: 17px;
-    line-height: inherit;
-    background-color: #fdf5e62e;
-    font-family: monospace;
-} */
 
-  textarea {
-    overflow: auto;
-    height: 133px;
-    width: 540px;
-  }
+textarea {
+overflow: auto;
+height: 133px;
+width: 540px;
+}
 
 button, html input[type=button], input[type=reset], input[type=submit] {
     -webkit-appearance: button;
@@ -131,8 +130,7 @@ button, html input[type=button], input[type=reset], input[type=submit] {
     border: solid;
     border-width: 11px;
     border-color: black;
-    min-width: 20%;
-    max-width: 56%;
+    width: 40%
 }
 
 li {
@@ -163,6 +161,7 @@ li {
     border-color: black;
     font-family: monospace;
     font-size: 17px;
+    width: 40%;
 }
 
 #bg {
@@ -172,27 +171,28 @@ li {
     width: 200%; 
     height: 200%;
     z-index: -1;
-  }
-  #bg img {
-    position: absolute; 
-    top: 0; 
-    left: 0; 
-    right: 0; 
-    bottom: 0; 
-    margin: auto; 
-    min-width: 50%;
-    min-height: 50%;
-  }
+}
 
-  #main {
-      height: auto;
-      width: 100%;
-  }
+#bg img {
+position: absolute; 
+top: 0; 
+left: 0; 
+right: 0; 
+bottom: 0; 
+margin: auto; 
+min-width: 50%;
+min-height: 50%;
+}
 
-  #herbsContainer{
-      height: auto;
-      width: 90%;
-  }
+#main {
+    height: auto;
+    width: 100%;
+}
+
+#herbsContainer{
+    height: auto;
+    width: 90%;
+}
 
 
 
