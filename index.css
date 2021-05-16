@@ -10,13 +10,8 @@
     font-size: 25px;
     margin-left: 22px;
     background-color: black;
-    color: oldlace
-}
-
-.checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {
-    margin-top: 4px\9;
-    margin-left: 5px;
-    margin-right: -18px;
+    color: oldlace;
+    cursor: pointer;
 }
 
 .h1, h1 {
@@ -26,31 +21,36 @@
 }
 
 form, #editForm {
+    float: left;
     background-color: #fdf5e6cc;
     margin-left: 439px;
-    margin-right: 435px;
-    /* margin-top: 56px; */
+    min-width: 30%;
+    max-width: 47%;
     padding-left: 39px;
     padding-right: 17px;
     padding-top: 5px;
     padding-bottom: 23px;
-    border-top-style: solid;
-    border-left-style: solid;
-    border-bottom-style: solid;
-    border-right: solid;
+    border: solid;
     border-width: 11px;
     border-color: black;
     font-family: monospace;
     font-size: 17px;
 }
 
-input, select, textarea {
+input, text, textarea {
     font-size: 17px;
     line-height: inherit;
     background-color: #fdf5e62e;
     font-family: monospace;
-    width: 539px;
+    /* min-width: 30%; */
+    width: 95%;
 }
+
+input, .herbForm{
+    min-width: 30%;
+    max-width: 95%;
+}
+
 
 label {
     display: inline-block;
@@ -61,21 +61,39 @@ label {
     font-size: 18px;
 }
 
-.checkbox label, .radio label {
-    min-height: 20px;
-    padding-left: 20px;
-    margin-bottom: 0;
-    font-weight: 400;
-    cursor: pointer;
-    font-size: 16px;
+td, th {
+    padding: 3px;
+    padding-right: 14px;
+    padding-left: 0px;
+    padding-top: 10px;
+    text-align: justify;
+    font-size: 14px;
 }
 
+.checkbox input[type=checkbox], .checkbox-inline input[type=checkbox] {
+    margin-left: -282px;
+    margin-top: 6px;
+}
+
+.checkbox label, .radio label {
+    margin-bottom: 0;
+    cursor: pointer;
+    font-size: 18px;
+    margin-right: 19px;
+    padding-left: 5px;
+    margin-top: -35px;
+    margin-left: -10px;
+    font-family: 'Satisfy';
+    line-height: 1;
+    letter-spacing: -1px;
+}
+/* 
 input, select, textarea {
     font-size: 17px;
     line-height: inherit;
     background-color: #fdf5e62e;
     font-family: monospace;
-}
+} */
 
   textarea {
     overflow: auto;
@@ -94,13 +112,6 @@ button, html input[type=button], input[type=reset], input[type=submit] {
     width: auto;
 }
 
-.checkbox input[type=checkbox], .checkbox-inline input[type=checkbox]{
-    margin-top: 4px\9;
-    margin-left: 5px;
-    margin-right: -18px;
-    width: fit-content;
-}
-
 #editBtn {
     margin-left: 259px;
     margin-top: 24px;
@@ -110,20 +121,18 @@ button, html input[type=button], input[type=reset], input[type=submit] {
 
 
 #encyclopedia {
-    margin-left: 478px;
-    margin-right: 486px;
-    z-index: 100;
+    float: left;
+    margin-left: 505px;
     background-color: #fdf5e6cc;
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 49px;
     padding-right: 52px;
-    border-top-style: solid;
-    border-left-style: solid;
-    border-bottom-style: solid;
-    border-right: solid;
+    border: solid;
     border-width: 11px;
     border-color: black;
+    min-width: 20%;
+    max-width: 56%;
 }
 
 li {
@@ -137,26 +146,8 @@ li {
 
 #herbs{
     text-decoration: underline;
+    cursor: pointer;
 }
-
-/* #herbProfile {
-    background-color: #fdf5e6cc;
-    margin-left: 478px;
-    margin-right: 486px;
-    margin-top: 56px;
-    padding-left: 53px;
-    padding-right: 17px;
-    padding-top: 18px;
-    padding-bottom: 23px;
-    border-top-style: solid;
-    border-left-style: solid;
-    border-bottom-style: solid;
-    border-right: solid;
-    border-width: 11px;
-    border-color: black;
-    font-family: 'Satisfy';
-    font-size: 19px;
-} */
 
 #herbProfile {
     background-color: #fdf5e6cc;
@@ -167,75 +158,41 @@ li {
     padding-right: 17px;
     padding-top: 18px;
     padding-bottom: 23px;
-    border-top-style: solid;
-    border-left-style: solid;
-    border-bottom-style: solid;
-    border-right: solid;
+    border: solid;
     border-width: 11px;
     border-color: black;
     font-family: monospace;
     font-size: 17px;
 }
 
+#bg {
+    position: fixed; 
+    top: -50%; 
+    left: -50%; 
+    width: 200%; 
+    height: 200%;
+    z-index: -1;
+  }
+  #bg img {
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0; 
+    margin: auto; 
+    min-width: 50%;
+    min-height: 50%;
+  }
 
-body {
-    background-image: url("https://images.pexels.com/photos/165228/pexels-photo-165228.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
-    /* background-position: center; */
-    background-repeat: no-repeat;
-    background-size: 100%;
-    opacity: 2;
-}
+  #main {
+      height: auto;
+      width: 100%;
+  }
+
+  #herbsContainer{
+      height: auto;
+      width: 90%;
+  }
 
 
 
-/* navbar css if removing bootstrap */
-
-/* 
-.navbar-nav>li {
-    float: left;
-}
-
-.nav>li {
-    position: relative;
-    display: block;
-}
-
-* {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-li {
-    display: list-item;
-    text-align: -webkit-match-parent;
-}
-
-.nav {
-    padding-left: 0;
-    margin-bottom: 0;
-    list-style: none;
-}
-
-ul {
-    list-style-type: disc;
-}
-
-body {
-    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #333;
-    background-color: #fff;
-}
-
-html {
-    font-size: 10px;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
-}
-
-html {
-    font-family: sans-serif;
-    -ms-text-size-adjust: 100%;
-    -webkit-text-size-adjust: 100%;
-} */
