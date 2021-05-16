@@ -136,7 +136,7 @@ class Herb {
                         <li>Don't worry about entering something twice</li>
                     </ul>
                 <input id='properties' class="herbform" type="text" placeholder="Use comma-separated-values, ie astringent, vulnerary"><br>
-                <div class='checkbox'></div>
+                <span class='checkbox'></span>
                 <input type="submit" value="Create New Herb Profile">
             </form>`
 
@@ -160,7 +160,7 @@ class Herb {
         })
         
         for(let i = 0; i < Property.allProperties.length; i++){
-            if(i%4 === 0){
+            if(i % 4 === 0){
                 tr = document.createElement('tr')
                 tr.className = 'tr'
                 table.appendChild(tr)
@@ -168,100 +168,21 @@ class Herb {
             const cb = document.createElement('input')
             const label = document.createElement('label')
             td = document.createElement('td')
-            label.innerText = Property.allProperties[i].name
             td.className = 'td'
+            cb.id = `cb-${Property.allProperties[i].id}`
+            cb.name = Property.allProperties[i].name
+            cb.className = 'cb'
+            // label.htmlFor = cb.id
+            // label.innerText = cb.name
             cb.setAttribute('type', 'checkbox')
             tr.appendChild(td)
-            td.appendChild(cb)
+            // td.appendChild(cb)
             td.appendChild(label)
-            
-            
-
-            // td.id = `td-${p.id}`
-            
-        //     // want to add event listener to take us to property show page w/ definition:
-        //     // label.addEventListener('click', e => this.fetchProperty(e))
-            cb.id = Property.allProperties[i].id
-        //     cb.name = p.name
-        //     cb.className = 'cb'
-        //     cb.label = p.name
-        //     cb.text = cb.name
-            label.htmlFor = cb.id
-
+            label.appendChild(cb)
             label.appendChild(document.createTextNode(cb.name))
-        //     table.appendChild(cb)
-        //     table.appendChild(label)
-
         }
         checkbox.appendChild(table)
     }
-
-    // static appendCheckboxes(){
-    //     const checkbox = document.getElementsByClassName('checkbox')[0]
-    //     const table = document.createElement('table')
-    //     table.id = 'propertiesTable'
-    //     // const headerRow = document.createElement('tr')
-    //     // const bodyRow = document.createElement('tr')
-    //     // const th = `
-    //     //     <th id='h1'>h1</th>
-    //     //     <th id='h2'>h2</th>
-    //     //     <th id='h3'>h3</th>
-    //     //     <th id='h4'>h4</th>
-    //     // `
-    //     // const th2 = document.createElement('th')
-    //     // table.createTBody
-      
-    //     checkbox.appendChild(table)    //     // table.appendChild(headerRow)
-    //     // table.appendChild(bodyRow)
-    //     // headerRow.innerHTML = th
-    //     // alphabetize properties...try to abstract this out with the other alphabetize function for encycplopedia index
-    //     Property.allProperties.sort((a, b) => {
-    //         if (a.name < b.name) {return -1}
-    //         if (a.name > b.name) {return 1}
-    //         return 0
-    //     })
-
-    //     // after every 5 properties, make a new row of 5 below
-    //     Property.allProperties.forEach(p => {
-    //         const cb = document.createElement('input')
-    //         const label = document.createElement('label')
-    //         const td = document.createElement('td')
-    //         td.id = `td-${p.id}`
-
-    //         // code without table
-    //         // checkbox.appendChild(cb)
-    //         // checkbox.appendChild(label)
-    //         // label.innerText = p.name
-    //         // label.id = p.id
-
-    //         const rows = []
-    //         const range = (start, end, length = end - start + 1) =>
-    //         Array.from({ length }, (_, i) => start + i)
-            
-    //         let i = 0
-    //         while( i <= propNames.length){
-                
-    //             rows.push(range(propNames[i, i+5]))
-                 
-    //         i+=6
-    //         }     
-   
-    //         // want to add event listener to take us to property show page w/ definition:
-    //         // label.addEventListener('click', e => this.fetchProperty(e))
-    //         cb.setAttribute('type', 'checkbox')
-    //         cb.id = p.id
-    //         cb.name = p.name
-    //         cb.className = 'cb'
-    //         cb.label = p.name
-    //         cb.text = cb.name
-    //         label.htmlFor = cb.id
-
-    //         label.appendChild(document.createTextNode(cb.name))
-    //         table.appendChild(td)
-    //         table.appendChild(cb)
-    //         table.appendChild(label)
-    //     })
-    // }
 
     editForm(e){
         e.preventDefault()
