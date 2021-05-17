@@ -54,7 +54,7 @@ class Herb {
             .then(herbs => {
                 if (herbs){
                     for(let herb of herbs){
-                        const h = new Herb(herb)
+                        new Herb(herb)
                     }
                     this.renderHerbs()
                 } else {
@@ -76,9 +76,6 @@ class Herb {
         div.id = 'encyclopedia'
         container.append(div)
         div.append(ul)
-
-        // how to get this to work w/ appendHerb() which needs instance of herb class
-        // const mapped = this.allHerbs.map(h => h.commonName).sort()
       
         // clean this up/ make dynamic
         // this.allHerbs.sort(alphabetize(commonName))???
@@ -87,8 +84,9 @@ class Herb {
             if (a.commonName > b.commonName) {return 1}
             return 0
         })
-        for(let herb of this.allHerbs){ herb.appendHerb()} 
-       
+        for(let herb of this.allHerbs){ 
+            herb.appendHerb()
+        }   
     }
 
     appendHerb(){
@@ -118,7 +116,6 @@ class Herb {
         console.log(this.properties)
         this.properties.forEach(p => par.innerHTML += `${p.name}, `)
         properties.append(par)
-
         editBtn.addEventListener('click', (e) => this.editForm(e))
     }
 
@@ -129,7 +126,6 @@ class Herb {
         <form id="herbForm">
                 <h1>Create a New Herb Profile:</h1><br>
                 ${formContent.call({})}
-
                 <label>Medicinal Properties:</label><br>
                     <ul>
                         <li>You can use a combination of checkboxes & manual entry</li>
@@ -169,14 +165,11 @@ class Herb {
             const label = document.createElement('label')
             td = document.createElement('td')
             td.className = 'td'
-            cb.id = `cb-${Property.allProperties[i].id}`
+            cb.id = Property.allProperties[i].id
             cb.name = Property.allProperties[i].name
             cb.className = 'cb'
-            // label.htmlFor = cb.id
-            // label.innerText = cb.name
             cb.setAttribute('type', 'checkbox')
             tr.appendChild(td)
-            // td.appendChild(cb)
             td.appendChild(label)
             label.appendChild(cb)
             label.appendChild(document.createTextNode(cb.name))
@@ -217,7 +210,6 @@ class Herb {
         //     spiritual_uses: spiritual
         // }}
 
-        // is it ok to use Herb here instead of this?
         Herb.appendCheckboxes()
         document.querySelectorAll('.cb').forEach( cb => {
             this.propertyIds.includes(parseInt(cb.id)) ? cb.checked = true : cb.checked = false
@@ -351,7 +343,7 @@ class Herb {
                             if(!propNames.includes(p.name)) {new Property(p)} 
                             if(!herb.propertyIds.includes(p.id)) {herb.propertyIds.push(p.id)}
                         }) 
-                    } 
+                    }
                     herb.herbProfile()
                 } else {
                     throw new Error(herbObj.message)
