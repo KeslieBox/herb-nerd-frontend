@@ -82,50 +82,6 @@ class Herb {
         li.addEventListener('click', e => this.herbProfile(e))
     }
 
-    herbProfile(e){
-        if(e) {e.preventDefault()}
-        const par = document.createElement('p')
-        container.innerHTML = `
-            <div id='herbProfile'>
-                <div id='title'><h1>${this.commonName}</h1></div>
-                <div id='latinName'><h3>Latin Name:</h3>${this.latinName}<br></div>
-                <div id='properties'><h3>Medicinal Properties:</h3></div>
-                <div id='medicinalUses'><h3>Medicinal Uses:</h3>${this.medicinalUses}<br></div>
-                <div id='spiritualUses'><h3>Spiritual Uses:</h3>${this.spiritualUses}<br></div>
-                <div id='history'><h3>History:</h3> ${this.history}<br></div>
-                <button id="editBtn">Edit Herb Profile</button>
-            </div>
-        `
-        const properties = document.getElementById('properties')
-        console.log(this.properties)
-        this.properties.forEach(p => par.innerHTML += `${p.name}, `)
-        properties.append(par)
-        editBtn.addEventListener('click', (e) => this.editForm(e))
-    }
-
-    static newHerbForm(e){
-        e.preventDefault()
-        
-        const herbForm = `
-        <form id="herbForm">
-                <h1>Create a New Herb Profile:</h1><br>
-                ${formContent.call({})}
-                <label>Medicinal Properties:</label><br>
-                    <ul>
-                        <li>You can use a combination of checkboxes & manual entry</li>
-                        <li>Don't worry about entering something twice</li>
-                    </ul>
-                <input id='properties' class="herbform" type="text" placeholder="Use comma-separated-values, ie astringent, vulnerary"><br>
-                <span class='checkbox'></span>
-                <input type="submit" value="Create New Herb Profile">
-            </form>`
-
-        Herb.clearContainer().innerHTML = herbForm
-        this.appendCheckboxes()
-        const formFound = document.getElementById('herbForm')
-        formFound.addEventListener('submit', e => {this.newHerbAttributes(e)}) 
-    }
-
     static appendCheckboxes(){
         const checkbox = document.getElementsByClassName('checkbox')[0]
         let table = document.createElement('table'), tr, td
@@ -161,76 +117,49 @@ class Herb {
         checkbox.appendChild(table)
     }
 
-    editForm(e){
+    herbProfile(){
+        const par = document.createElement('p')
+        container.innerHTML = `
+            <div id='herbProfile'>
+                <div id='title'><h1>${this.commonName}</h1></div>
+                <div id='latinName'><h3>Latin Name:</h3>${this.latinName}<br></div>
+                <div id='properties'><h3>Medicinal Properties:</h3></div>
+                <div id='medicinalUses'><h3>Medicinal Uses:</h3>${this.medicinalUses}<br></div>
+                <div id='spiritualUses'><h3>Spiritual Uses:</h3>${this.spiritualUses}<br></div>
+                <div id='history'><h3>History:</h3> ${this.history}<br></div>
+                <button id="editBtn">Edit Herb Profile</button>
+            </div>
+        `
+        const properties = document.getElementById('properties')
+        this.properties.forEach(p => par.innerHTML += `${p.name}, `)
+        properties.append(par)
+        editBtn.addEventListener('click', (e) => this.editForm(e))
+    }
+
+    static newHerbForm(e){
         e.preventDefault()
-        const form = `
-        <form id="editForm">
-                <h1>Edit Herb Profile:</h1><br>
-                ${formContent.call(this)} 
-                <label id='prop'>Medicinal Properties:</label>
-                <span class='checkbox'></span><br>
-                <input id='submitBtn' type="submit" value="Edit Herb Profile">
-        </form> `
         
-        Herb.clearContainer().innerHTML = form
+        const herbForm = `
+        <form id="herbForm">
+                <h1>Create a New Herb Profile:</h1><br>
+                ${formContent.call({})}
+                <label>Medicinal Properties:</label><br>
+                    <ul>
+                        <li>You can use a combination of checkboxes & manual entry</li>
+                        <li>Don't worry about entering something twice</li>
+                    </ul>
+                <input id='properties' class="herbform" type="text" placeholder="Use comma-separated-values, ie astringent, vulnerary"><br>
+                <span class='checkbox'></span>
+                <input type="submit" value="Create New Herb Profile">
+            </form>`
 
-        Herb.appendCheckboxes()
-        document.querySelectorAll('.cb').forEach( cb => {
-            this.propertyIds.includes(parseInt(cb.id)) ? cb.checked = true : cb.checked = false
-        })
+        Herb.clearContainer().innerHTML = herbForm
+        this.appendCheckboxes()
+        const formFound = document.getElementById('herbForm')
         
-        formFound.addEventListener('submit', e => this.submitEdit(e))
+        formFound.addEventListener('submit', e => {this.newHerbAttributes(e)}) 
     }
 
-    submitEdit(e){
-        e.preventDefault()
-    
-        const checkboxProperties = []
-        const checkbox = document.querySelectorAll('.cb')
-        const common = document.getElementById('common').value
-        const latin = document.getElementById('latin').value
-        const medicinal = document.getElementById('medicinal').value
-        const history = document.getElementById('history').value
-        const spiritual = document.getElementById('spiritual').value
-
-        checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
-     
-        const options = {
-            method: 'PATCH',
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify({
-                herb: {
-                common_name: common,
-                latin_name: latin,
-                property_ids: checkboxProperties,
-                medicinal_uses: medicinal,
-                history: history,
-                spiritual_uses: spiritual
-                }
-            })
-        }
-
-        fetch(`http://localhost:3000/herbs/${this.id}`, options)
-        .then(resp => resp.json())
-        .then(herbObj => {
-            const herb = Herb.allHerbs.find(h => h.id === herbObj.id)
-            herb.updateAttributes(herbObj)
-            herb.herbProfile(e)
-        })
-    }
-
-    updateAttributes(herbObj){
-        this.commonName = herbObj.commonName
-        this.latinName = herbObj.latinName
-        this.spiritualUses = herbObj.spiritualUses
-        this.history = herbObj.history
-        this.medicinalUses = herbObj.medicinalUses
-        this.propertyIds = herbObj.propertyIds 
-    }
-    
     static newHerbAttributes(e){
         e.preventDefault()
         const common = document.getElementById('common').value
@@ -300,5 +229,78 @@ class Herb {
                 }
             }).catch((err) => alert(err))
     }
+
+    editForm(e){
+        e.preventDefault()
+        const form = `
+        <form id="editForm">
+                <h1>Edit Herb Profile:</h1><br>
+                ${formContent.call(this)} 
+                <label id='prop'>Medicinal Properties:</label>
+                <span class='checkbox'></span><br>
+                <input id='submitBtn' type="submit" value="Edit Herb Profile">
+        </form> `
+        
+        Herb.clearContainer().innerHTML = form
+        const formFound = document.getElementById('editForm')
+        Herb.appendCheckboxes()
+        
+        document.querySelectorAll('.cb').forEach( cb => {
+            this.propertyIds.includes(parseInt(cb.id)) ? cb.checked = true : cb.checked = false
+        })
+        
+        formFound.addEventListener('submit', e => this.submitEdit(e))
+    }
+
+    submitEdit(e){
+        e.preventDefault()
+    
+        const checkboxProperties = []
+        const checkbox = document.querySelectorAll('.cb')
+        const common = document.getElementById('common').value
+        const latin = document.getElementById('latin').value
+        const medicinal = document.getElementById('medicinal').value
+        const history = document.getElementById('history').value
+        const spiritual = document.getElementById('spiritual').value
+
+        checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
+     
+        const options = {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                herb: {
+                common_name: common,
+                latin_name: latin,
+                property_ids: checkboxProperties,
+                medicinal_uses: medicinal,
+                history: history,
+                spiritual_uses: spiritual
+                }
+            })
+        }
+
+        fetch(`http://localhost:3000/herbs/${this.id}`, options)
+        .then(resp => resp.json())
+        .then(herbObj => {
+            const herb = Herb.allHerbs.find(h => h.id === herbObj.id)
+            herb.updateAttributes(herbObj)
+            herb.herbProfile()
+        })
+    }
+
+    updateAttributes(herbObj){
+        this.commonName = herbObj.commonName
+        this.latinName = herbObj.latinName
+        this.spiritualUses = herbObj.spiritualUses
+        this.history = herbObj.history
+        this.medicinalUses = herbObj.medicinalUses
+        this.propertyIds = herbObj.propertyIds 
+    }
+    
+    
 }
 

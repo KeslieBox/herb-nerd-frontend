@@ -25,11 +25,6 @@ class Property {
             }).catch(err => alert(err))
     }
 
-    // want to add event listener to take us to property show page
-    // fetchProperty(e){
-    //     debugger
-    // }
-
     // not using this yet
     static postProperty(p){
        
