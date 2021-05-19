@@ -15,13 +15,6 @@ function formContent(){
     <textarea rows = "5" cols = "60" id='history' class="textarea" type="text_area" form='herbForm'>${this.history || ""}</textarea><br>`
 }
 
-// can i abstract this somehow??
-function alphabetize(){
-    if (a.name < b.name) {return -1}
-    if (a.name > b.name) {return 1}
-    return 0
-}
-
 class Herb {
     static allHerbs = []
 
@@ -69,9 +62,7 @@ class Herb {
         div.id = 'encyclopedia'
         container.append(div)
         div.append(ul)
-      
-        // clean this up/ make dynamic
-        // this.allHerbs.sort(alphabetize(commonName))???
+     
         this.allHerbs.sort((a, b) => {
             if (a.commonName < b.commonName) {return -1}
             if (a.commonName > b.commonName) {return 1}
@@ -182,26 +173,6 @@ class Herb {
         </form> `
         
         Herb.clearContainer().innerHTML = form
-        
-        const formFound = document.getElementById('editForm')
-        const checkboxProperties = []
-        const checkbox = document.querySelectorAll('.cb')
-        const common = document.getElementById('common').value
-        const latin = document.getElementById('latin').value
-        const medicinal = document.getElementById('medicinal').value
-        const history = document.getElementById('history').value
-        const spiritual = document.getElementById('spiritual').value
-
-        // checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
-
-        // const herbAttributes = {herb: {
-        //     common_name: common,
-        //     latin_name: latin,
-        //     property_ids: checkboxProperties,
-        //     medicinal_uses: medicinal,
-        //     history: history,
-        //     spiritual_uses: spiritual
-        // }}
 
         Herb.appendCheckboxes()
         document.querySelectorAll('.cb').forEach( cb => {
@@ -221,18 +192,9 @@ class Herb {
         const medicinal = document.getElementById('medicinal').value
         const history = document.getElementById('history').value
         const spiritual = document.getElementById('spiritual').value
-        // for trying out adding new properties here, also need to change the form to have this input
-        // const properties = document.getElementById('properties').value.toLowerCase().split(', ')
 
         checkbox.forEach(cb => cb.checked ? checkboxProperties.push(parseInt(cb.id)) : cb)
-        // create single source for the body for edit and for posting a new herb
-        // experiment with adding new properties here, need to add properties_attributes to request body
-        // let properties_attributes = {}
-        // for(let i=0; i < properties.length; i++){
-        //     let o = {}
-        //     o[i] = {name: properties[i]}
-        //     properties_attributes = Object.assign(properties_attributes, o)
-        // }
+     
         const options = {
             method: 'PATCH',
             headers: {
@@ -255,10 +217,6 @@ class Herb {
         .then(resp => resp.json())
         .then(herbObj => {
             const herb = Herb.allHerbs.find(h => h.id === herbObj.id)
-            // can i make a post request from inside of here to make new properties while in edit form? and then update edit and new forms to be even more the same??
-            // if (herb.properties){
-            //     herbObj.properties.forEach(p => {if (!Property.allProperties.includes(p) && p.name) {new Property(p)}}) 
-            // }
             herb.updateAttributes(herbObj)
             herb.herbProfile(e)
         })

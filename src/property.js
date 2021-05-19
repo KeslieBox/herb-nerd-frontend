@@ -7,7 +7,6 @@ class Property {
         Property.allProperties.push(this)
     }
 
-    // not using this yet
     static fetchProperties(){
         fetch('http://localhost:3000/properties')
             .then(resp => resp.json())
@@ -25,29 +24,6 @@ class Property {
                 // this.appendCheckboxes()
             }).catch(err => alert(err))
     }
-
-
-    // should this go here or herb class?
-    // static appendCheckboxes(){
-    //     debugger
-    //     const checkbox = document.getElementsByClassName('checkbox')[0]
-    //     // const cb = document.querySelectorAll('.cb')
-    //     this.allProperties.forEach(p => {
-    //         const cb = document.createElement('input')
-    //         const label = document.createElement('label')
-    //         label.innerText = p.name
-    //         label.id = p.id
-    //         // want to add event listener to take us to property show page w/ definition:
-    //         // label.addEventListener('click', e => this.fetchProperty(e))
-    //         cb.setAttribute('type', 'checkbox')
-    //         cb.id = p.id
-    //         cb.name = p.name
-    //         cb.className = 'cb'
-    //         checkbox.appendChild(cb)
-    //         checkbox.appendChild(label)
-    //         // !this.allProperties.includes(p.id) ? this.allProperties.push(p.id) : p
-    //     })
-    // }
 
     // want to add event listener to take us to property show page
     // fetchProperty(e){
