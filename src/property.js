@@ -11,17 +11,11 @@ class Property {
         fetch('http://localhost:3000/properties')
             .then(resp => resp.json())
             .then(properties => { 
-                properties.forEach(p => {
-                    if (!Property.allProperties.includes(p) && p.name){
+                if (properties){
+                    for(let p of properties) {
                         new Property(p)
-                    // }else if(Property.allProperties.includes(p) && p.name){
-
-                    // }else {
-                    //     throw new Error(p.message)
                     }
-                })
-                // need to call when new herb and edit herb forms are being created 
-                // this.appendCheckboxes()
+                }
             }).catch(err => alert(err))
     }
 

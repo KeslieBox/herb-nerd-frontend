@@ -1,6 +1,6 @@
 const herbsURL = 'http://localhost:3000/herbs'
 const container = document.getElementById('herbsContainer')
-const propNames = Property.allProperties.map(p => p.name)
+// const propNames = Property.allProperties.map(p => p.name)
 
 function formContent(){
      return `<label>Common Name:</label>
@@ -30,6 +30,7 @@ class Herb {
         Herb.allHerbs.push(this)   
     }
 
+    // binds an object property to a function
     get properties(){
         return Property.allProperties.filter(property => this.propertyIds.includes(property.id))
     }  
@@ -47,6 +48,8 @@ class Herb {
                     throw new Error(herb.message)
                 }
             }).catch(err => alert(err))
+        
+        Property.fetchProperties()
     }
 
     static clearContainer(){
@@ -68,6 +71,7 @@ class Herb {
             if (a.commonName > b.commonName) {return 1}
             return 0
         })
+
         for(let herb of this.allHerbs){ 
             herb.appendHerb()
         }   
@@ -96,11 +100,6 @@ class Herb {
         })
         
         for(let i = 0; i < Property.allProperties.length; i++){
-            if(i % 4 === 0){
-                tr = document.createElement('tr')
-                tr.className = 'tr'
-                table.appendChild(tr)
-            }
             const cb = document.createElement('input')
             const label = document.createElement('label')
             td = document.createElement('td')
@@ -109,6 +108,14 @@ class Herb {
             cb.name = Property.allProperties[i].name
             cb.className = 'cb'
             cb.setAttribute('type', 'checkbox')
+
+            // every 4th element, create new row
+            if(i % 4 === 0){
+                tr = document.createElement('tr')
+                tr.className = 'tr'
+                table.appendChild(tr)
+            }
+
             tr.appendChild(td)
             td.appendChild(label)
             label.appendChild(cb)
@@ -128,11 +135,11 @@ class Herb {
                 <div id='spiritualUses'><h3>Spiritual Uses:</h3>${this.spiritualUses}<br></div>
                 <div id='history'><h3>History:</h3> ${this.history}<br></div>
                 <button id="editBtn">Edit Herb Profile</button>
-            </div>
-        `
+            </div>`
         const properties = document.getElementById('properties')
-        this.properties.forEach(p => par.innerHTML += `${p.name}, `)
         properties.append(par)
+        
+        this.properties.forEach(p => par.innerHTML += `${p.name}, `)
         editBtn.addEventListener('click', (e) => this.editForm(e))
     }
 

@@ -1,6 +1,6 @@
 Herb.fetchHerbs()
-Property.fetchProperties()
 
+// handles events connected to navbar
 const encycNav = document.getElementById('encyc-nav')
 const newHerbNav = document.getElementById('newHerb-nav')
 
