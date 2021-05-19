@@ -1,6 +1,5 @@
 const herbsURL = 'http://localhost:3000/herbs'
 const container = document.getElementById('herbsContainer')
-const propNames = Property.allProperties.map(p => p.name)
 
 function formContent(){
      return `<label>Common Name:</label>
@@ -54,6 +53,8 @@ class Herb {
                     throw new Error(herb.message)
                 }
             }).catch(err => alert(err))
+
+        Property.fetchProperties()
     }
 
     static clearContainer(){
@@ -141,6 +142,7 @@ class Herb {
         table.id = 'table'
         table.setAttribute('width', '100%')
 
+        
         // alphabetize properties...try to abstract this out with the other alphabetize function for encycplopedia index
         Property.allProperties.sort((a, b) => {
             if (a.name < b.name) {return -1}

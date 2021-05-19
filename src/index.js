@@ -1,5 +1,5 @@
 Herb.fetchHerbs()
-Property.fetchProperties()
+// Property.fetchProperties()
 
 const encycNav = document.getElementById('encyc-nav')
 const newHerbNav = document.getElementById('newHerb-nav')

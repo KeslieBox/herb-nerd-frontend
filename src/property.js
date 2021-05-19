@@ -1,26 +1,34 @@
 class Property {
     static allProperties = []
+    static propNames = []
 
     constructor({id, name}){
         this.id = id
         this.name = name
         Property.allProperties.push(this)
+        Property.propNames.push(this)
     }
 
     // not using this yet
     static fetchProperties(){
+        debugger
         fetch('http://localhost:3000/properties')
             .then(resp => resp.json())
             .then(properties => { 
-                properties.forEach(p => {
-                    if (!Property.allProperties.includes(p) && p.name){
+                if(properties){
+                    for (let p of properties){
                         new Property(p)
-                    // }else if(Property.allProperties.includes(p) && p.name){
-
-                    // }else {
-                    //     throw new Error(p.message)
                     }
-                })
+                            
+                        // if (!Property.propNames.includes(p.name)){
+                            // new Property(p)
+                        // }else if(Property.allProperties.includes(p) && p.name){
+                        
+                        // }else {
+                        //     throw new Error(p.message)
+                        
+                    
+                }
                 // need to call when new herb and edit herb forms are being created 
                 // this.appendCheckboxes()
             }).catch(err => alert(err))
