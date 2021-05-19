@@ -1,13 +1,6 @@
 const herbsURL = 'http://localhost:3000/herbs'
 const container = document.getElementById('herbsContainer')
 const propNames = Property.allProperties.map(p => p.name)
-// const checkboxProperties = []
-// const checkbox = document.querySelectorAll('.cb')
-// const common = document.getElementById('common').value
-// const latin = document.getElementById('latin').value
-// const medicinal = document.getElementById('medicinal').value
-// const history = document.getElementById('history').value
-// const spiritual = document.getElementById('spiritual').value
 
 function formContent(){
      return `<label>Common Name:</label>
@@ -298,8 +291,7 @@ class Herb {
 
         let properties_attributes = {}
         for(let i=0; i < properties.length; i++){
-            let o = {}
-            o[i] = {name: properties[i]}
+            let o = {[i]: {name: properties[i]}}
             properties_attributes = Object.assign(properties_attributes, o)
         }
 
